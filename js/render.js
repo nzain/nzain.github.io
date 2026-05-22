@@ -15,6 +15,12 @@
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" aria-hidden="true" focusable="false">' +
       '<path d="M2.5 2h7L6 6l3.5 4h-7L6 6 2.5 2z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>' +
       "</svg>",
+    components:
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" aria-hidden="true" focusable="false">' +
+      '<path d="M3.25 2.5h5.25v7H3.25z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>' +
+      '<path d="M3.25 2.5v7" fill="none" stroke="currentColor" stroke-width="1"/>' +
+      '<path d="M5.25 5.25h3.5" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>' +
+      "</svg>",
   };
 
   function metaPair(label, value) {
@@ -37,14 +43,7 @@
     });
   }
 
-  function metaComponentsValue(value) {
-    if (!value) {
-      return "";
-    }
-    return "<dd>" + formatComponentsHtml(value) + "</dd>";
-  }
-
-  function metaPairIcon(kind, value) {
+  function metaPairIcon(kind, value, ddHtml) {
     if (!value) {
       return "";
     }
@@ -59,13 +58,13 @@
       '">' +
       icon +
       "</dt><dd>" +
-      escapeHtml(value) +
+      (ddHtml != null ? ddHtml : escapeHtml(value)) +
       "</dd>"
     );
   }
 
-  function metaStatIcon(kind, value, statClass) {
-    var pair = metaPairIcon(kind, value);
+  function metaStatIcon(kind, value, statClass, ddHtml) {
+    var pair = metaPairIcon(kind, value, ddHtml);
     if (!pair) {
       return "";
     }
@@ -108,13 +107,12 @@
       meta.appendChild(row1);
     }
     var durationStat = metaStatIcon("duration", spell.duration);
-    var componentsStat = "";
-    if (spell.components) {
-      componentsStat =
-        '<div class="card-meta-stat card-meta-stat--components">' +
-        metaComponentsValue(spell.components) +
-        "</div>";
-    }
+    var componentsStat = metaStatIcon(
+      "components",
+      spell.components,
+      "card-meta-stat--components",
+      spell.components ? formatComponentsHtml(spell.components) : null
+    );
     if (durationStat || componentsStat) {
       var row2 = document.createElement("div");
       row2.className = "card-meta-row card-meta-row--split";
