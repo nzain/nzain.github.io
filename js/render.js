@@ -31,6 +31,19 @@
     return "<dd>" + escapeHtml(value) + "</dd>";
   }
 
+  function formatComponentsHtml(value) {
+    return escapeHtml(value).replace(/\([^)]*\)/g, function (segment) {
+      return "<b>" + segment + "</b>";
+    });
+  }
+
+  function metaComponentsValue(value) {
+    if (!value) {
+      return "";
+    }
+    return "<dd>" + formatComponentsHtml(value) + "</dd>";
+  }
+
   function metaPairIcon(kind, value) {
     if (!value) {
       return "";
@@ -99,7 +112,7 @@
     if (spell.components) {
       componentsStat =
         '<div class="card-meta-stat card-meta-stat--components">' +
-        metaValue(spell.components) +
+        metaComponentsValue(spell.components) +
         "</div>";
     }
     if (durationStat || componentsStat) {

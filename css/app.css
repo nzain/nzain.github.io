@@ -304,20 +304,27 @@ body {
 
 .card-meta-row--split {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(50%, max-content) minmax(0, 1fr);
   align-items: center;
   column-gap: 0.25rem;
 }
 
-.card-meta-row--split > .card-meta-stat--range {
-  grid-column: 2;
+.card-meta-row--split > .card-meta-stat:first-child {
+  min-width: max-content;
 }
 
+.card-meta-row--split > .card-meta-stat--range,
 .card-meta-row--split > .card-meta-stat--components {
   grid-column: 2;
+  min-width: 0;
 }
 
-.card-meta-row--split .card-meta-stat dd {
+.card-meta-row--split .card-meta-stat:first-child dd {
+  overflow-wrap: normal;
+}
+
+.card-meta-row--split .card-meta-stat--range dd,
+.card-meta-row--split .card-meta-stat--components dd {
   overflow-wrap: break-word;
 }
 
