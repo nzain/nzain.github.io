@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spell Card Generator</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <header class="toolbar" id="toolbar">
+    <h1 class="app-title" data-i18n="appTitle">Spell Card Generator</h1>
+    <div class="toolbar-row">
+      <select id="ui-lang" data-i18n-aria="uiLanguage" aria-label="UI language">
+        <option value="en">English</option>
+        <option value="de">Deutsch</option>
+      </select>
+      <div class="file-actions">
+        <button type="button" id="btn-open" data-i18n="openCsv">Open CSV…</button>
+        <button type="button" id="btn-export" disabled data-i18n="exportCsv">Export CSV…</button>
+        <button type="button" id="btn-print" data-i18n="print">Print</button>
+        <input type="file" id="file-input" accept=".csv,text/csv" hidden>
+      </div>
+      <span class="active-file" id="active-file" hidden></span>
+      <span class="spell-count" id="spell-count"></span>
+    </div>
+    <div class="toolbar-row">
+      <label class="toolbar-field">
+        <span data-i18n="levelFrom">Level from</span>
+        <input type="number" id="level-min" min="0" max="9" value="0">
+      </label>
+      <label class="toolbar-field">
+        <span data-i18n="levelTo">to</span>
+        <input type="number" id="level-max" min="0" max="9" value="9">
+      </label>
+      <label class="toolbar-field">
+        <span data-i18n="cardWidth">Card width (mm)</span>
+        <input type="number" id="card-width" min="40" max="100" value="63">
+      </label>
+      <label class="toolbar-field">
+        <span data-i18n="cardHeight">Card height (mm)</span>
+        <input type="number" id="card-height" min="50" max="150" value="88">
+      </label>
+    </div>
+  </header>
+
+  <aside class="status" id="status" role="status"></aside>
+  <div class="log-panel" id="log-panel" hidden></div>
+
+  <main class="cards-grid" id="cards-grid"></main>
+
+  <script src="vendor/papaparse.min.js"></script>
+  <script src="vendor/purify.min.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/sanitize.js"></script>
+  <script src="js/csv.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
