@@ -112,17 +112,17 @@
     if (spell.classes || spell.school) {
       footer = document.createElement("footer");
       footer.className = "card-footer";
-      if (spell.classes) {
-        var classesEl = document.createElement("span");
-        classesEl.className = "card-footer-classes";
-        classesEl.textContent = spell.classes;
-        footer.appendChild(classesEl);
-      }
       if (spell.school) {
         var schoolEl = document.createElement("span");
         schoolEl.className = "card-footer-school";
         schoolEl.textContent = spell.school;
         footer.appendChild(schoolEl);
+      }
+      if (spell.classes) {
+        var classesEl = document.createElement("span");
+        classesEl.className = "card-footer-classes";
+        classesEl.textContent = spell.classes;
+        footer.appendChild(classesEl);
       }
     }
 

@@ -1,6 +1,6 @@
 :root {
-  --card-width-mm: 60;
-  --card-height-mm: 89;
+  --card-width-mm: 63;
+  --card-height-mm: 90;
   --cards-per-row: 3;
   --cards-per-col: 3;
   --ink: #1a1a1a;
@@ -337,7 +337,7 @@ body {
   flex-shrink: 0;
 }
 
-.card-footer-school {
+.card-footer-classes {
   margin-left: auto;
   text-align: right;
 }
