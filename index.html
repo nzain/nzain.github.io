@@ -41,6 +41,14 @@
         <input type="number" id="card-height" min="50" max="150" value="88">
       </label>
     </div>
+    <div class="toolbar-row class-filter-row" id="class-filter-row" hidden>
+      <span class="class-filter-label" data-i18n="classFilter">Classes</span>
+      <div class="class-filter-actions">
+        <button type="button" id="class-all" data-i18n="classAll">All</button>
+        <button type="button" id="class-none" data-i18n="classNone">None</button>
+      </div>
+      <div class="class-filter-chips" id="class-filter-chips" role="group" data-i18n-aria="classFilter"></div>
+    </div>
   </header>
 
   <aside class="status" id="status" role="status"></aside>

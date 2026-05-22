@@ -24,6 +24,13 @@
     return "<dt>" + escapeHtml(label) + "</dt><dd>" + escapeHtml(value) + "</dd>";
   }
 
+  function metaValue(value) {
+    if (!value) {
+      return "";
+    }
+    return "<dd>" + escapeHtml(value) + "</dd>";
+  }
+
   function metaPairIcon(kind, value) {
     if (!value) {
       return "";
@@ -88,17 +95,18 @@
       meta.appendChild(row1);
     }
     var durationStat = metaStatIcon("duration", spell.duration);
-    if (durationStat) {
-      var row2 = document.createElement("div");
-      row2.className = "card-meta-row";
-      row2.innerHTML = durationStat;
-      meta.appendChild(row2);
-    }
+    var componentsStat = "";
     if (spell.components) {
-      var row3 = document.createElement("div");
-      row3.className = "card-meta-row";
-      row3.innerHTML = metaPair(SCG_I18N.t("components"), spell.components);
-      meta.appendChild(row3);
+      componentsStat =
+        '<div class="card-meta-stat card-meta-stat--components">' +
+        metaValue(spell.components) +
+        "</div>";
+    }
+    if (durationStat || componentsStat) {
+      var row2 = document.createElement("div");
+      row2.className = "card-meta-row card-meta-row--split";
+      row2.innerHTML = durationStat + componentsStat;
+      meta.appendChild(row2);
     }
 
     var body = document.createElement("div");
@@ -164,20 +172,65 @@
     });
   }
 
+  function parseSpellClasses(spell) {
+    if (!spell || !spell.classes) {
+      return [];
+    }
+    return String(spell.classes)
+      .split(",")
+      .map(function (c) {
+        return c.trim();
+      })
+      .filter(Boolean);
+  }
+
+  function spellMatchesClassFilter(spell, selectedClasses, allClassCount) {
+    if (!selectedClasses || !selectedClasses.length) {
+      return false;
+    }
+    if (selectedClasses.length >= allClassCount) {
+      return true;
+    }
+    var spellClasses = parseSpellClasses(spell);
+    if (!spellClasses.length) {
+      return false;
+    }
+    return selectedClasses.some(function (cls) {
+      return spellClasses.indexOf(cls) >= 0;
+    });
+  }
+
   function renderGrid(container, spells, options) {
     options = options || {};
     var levelMin = options.levelMin != null ? options.levelMin : 0;
     var levelMax = options.levelMax != null ? options.levelMax : 9;
+    var selectedClasses = options.classes || null;
+    var allClassCount =
+      options.allClassCount != null
+        ? options.allClassCount
+        : SCG_I18N.CLASS_IDS.length;
+    var classFilterActive =
+      selectedClasses &&
+      selectedClasses.length &&
+      selectedClasses.length < allClassCount;
     container.innerHTML = "";
 
     var filtered = spells.filter(function (s) {
-      return s.level >= levelMin && s.level <= levelMax;
+      if (s.level < levelMin || s.level > levelMax) {
+        return false;
+      }
+      if (classFilterActive && !spellMatchesClassFilter(s, selectedClasses, allClassCount)) {
+        return false;
+      }
+      return true;
     });
 
     if (!filtered.length) {
       var empty = document.createElement("p");
       empty.className = "empty-state";
-      empty.textContent = SCG_I18N.t("noSpells");
+      empty.textContent = spells.length
+        ? SCG_I18N.t("noMatchFilter")
+        : SCG_I18N.t("noSpells");
       container.appendChild(empty);
       return { shown: 0, total: spells.length };
     }

@@ -28,6 +28,18 @@
       parseErrors: "Parse warnings",
       spellCount: "{shown} / {total} cards",
       selectCsvOnly: "Please select a .csv file.",
+      classFilter: "Classes",
+      classAll: "All",
+      classNone: "None",
+      classBard: "Bard",
+      classCleric: "Cleric",
+      classDruid: "Druid",
+      classPaladin: "Paladin",
+      classRanger: "Ranger",
+      classSorc: "Sorcerer",
+      classWarlock: "Warlock",
+      classWiz: "Wizard",
+      noMatchFilter: "No spells match the current filters.",
     },
     de: {
       appTitle: "Zauberkarten-Generator",
@@ -55,8 +67,31 @@
       parseErrors: "Parse-Hinweise",
       spellCount: "{shown} / {total} Karten",
       selectCsvOnly: "Bitte eine .csv-Datei wählen.",
+      classFilter: "Klassen",
+      classAll: "Alle",
+      classNone: "Keine",
+      classBard: "Barde",
+      classCleric: "Kleriker",
+      classDruid: "Druide",
+      classPaladin: "Paladin",
+      classRanger: "Waldläufer",
+      classSorc: "Zauberer",
+      classWarlock: "Hexenmeister",
+      classWiz: "Magier",
+      noMatchFilter: "Keine Zauber entsprechen den aktuellen Filtern.",
     },
   };
+
+  var CLASS_IDS = [
+    "bard",
+    "cleric",
+    "druid",
+    "paladin",
+    "ranger",
+    "sorc",
+    "warlock",
+    "wiz",
+  ];
 
   var STORAGE_KEY = "scg-ui-lang";
   var currentLang = "en";
@@ -105,6 +140,16 @@
     });
   }
 
+  function classLabel(classId) {
+    var key = "class" + classId.charAt(0).toUpperCase() + classId.slice(1);
+    if (classId === "sorc") {
+      key = "classSorc";
+    } else if (classId === "wiz") {
+      key = "classWiz";
+    }
+    return t(key);
+  }
+
   function formatLevel(level) {
     var n = parseInt(level, 10);
     if (n === 0 || isNaN(n)) {
@@ -118,6 +163,8 @@
     setLang: setLang,
     getLang: function () { return currentLang; },
     applyToDocument: applyToDocument,
+    classLabel: classLabel,
+    CLASS_IDS: CLASS_IDS,
     formatLevel: formatLevel,
     init: function () {
       setLang(getStoredLang());

@@ -4,6 +4,8 @@
   var spells = [];
   var activeFilename = "";
   var parseErrors = [];
+  var selectedClasses = {};
+  var hasClassTags = false;
 
   var els = {};
 
@@ -73,10 +75,100 @@
     }
   }
 
-  function getLevelFilter() {
+  function spellsHaveClassTags(list) {
+    return list.some(function (s) {
+      return s.classes && String(s.classes).trim();
+    });
+  }
+
+  function loadClassFilterState() {
+    SCG_I18N.CLASS_IDS.forEach(function (id) {
+      selectedClasses[id] = true;
+    });
+    try {
+      var raw = localStorage.getItem("scg-class-filter");
+      if (!raw) {
+        return;
+      }
+      var saved = JSON.parse(raw);
+      if (!saved || typeof saved !== "object") {
+        return;
+      }
+      SCG_I18N.CLASS_IDS.forEach(function (id) {
+        if (Object.prototype.hasOwnProperty.call(saved, id)) {
+          selectedClasses[id] = !!saved[id];
+        }
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveClassFilterState() {
+    try {
+      localStorage.setItem("scg-class-filter", JSON.stringify(selectedClasses));
+    } catch (e) { /* ignore */ }
+  }
+
+  function getSelectedClassIds() {
+    return SCG_I18N.CLASS_IDS.filter(function (id) {
+      return selectedClasses[id];
+    });
+  }
+
+  function syncClassChipStates() {
+    if (!els.classFilterChips) {
+      return;
+    }
+    els.classFilterChips.querySelectorAll(".class-chip-input").forEach(function (input) {
+      input.checked = !!selectedClasses[input.dataset.classId];
+    });
+  }
+
+  function buildClassFilterChips() {
+    els.classFilterChips.innerHTML = "";
+    SCG_I18N.CLASS_IDS.forEach(function (id) {
+      var label = document.createElement("label");
+      label.className = "class-chip";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.className = "class-chip-input";
+      input.dataset.classId = id;
+      input.checked = !!selectedClasses[id];
+      var text = document.createElement("span");
+      text.className = "class-chip-label";
+      text.textContent = SCG_I18N.classLabel(id);
+      input.addEventListener("change", function () {
+        selectedClasses[id] = input.checked;
+        saveClassFilterState();
+        render();
+      });
+      label.appendChild(input);
+      label.appendChild(text);
+      els.classFilterChips.appendChild(label);
+    });
+  }
+
+  function setAllClassSelection(on) {
+    SCG_I18N.CLASS_IDS.forEach(function (id) {
+      selectedClasses[id] = on;
+    });
+    saveClassFilterState();
+    syncClassChipStates();
+    render();
+  }
+
+  function updateClassFilterVisibility() {
+    if (!els.classFilterRow) {
+      return;
+    }
+    els.classFilterRow.hidden = !hasClassTags;
+  }
+
+  function getRenderOptions() {
     return {
       levelMin: parseInt(els.levelMin.value, 10) || 0,
       levelMax: parseInt(els.levelMax.value, 10) || 9,
+      classes: getSelectedClassIds(),
+      allClassCount: SCG_I18N.CLASS_IDS.length,
     };
   }
 
@@ -98,7 +190,7 @@
   }
 
   function render() {
-    var stats = SCG_Render.renderGrid(els.grid, spells, getLevelFilter());
+    var stats = SCG_Render.renderGrid(els.grid, spells, getRenderOptions());
     updateSpellCount(stats);
     requestAnimationFrame(function () {
       SCG_Render.checkAllOverflow(els.grid);
@@ -108,11 +200,13 @@
   function setSpells(newSpells, errors, filename) {
     spells = newSpells;
     parseErrors = errors || [];
+    hasClassTags = spellsHaveClassTags(spells);
     if (filename) {
       activeFilename = filename;
     }
     setLog(parseErrors);
     updateActiveFileLabel();
+    updateClassFilterVisibility();
     render();
     els.btnExport.disabled = !spells.length;
   }
@@ -190,12 +284,19 @@
 
     els.uiLang.addEventListener("change", function () {
       SCG_I18N.setLang(els.uiLang.value);
+      buildClassFilterChips();
       render();
       updateActiveFileLabel();
     });
 
     els.levelMin.addEventListener("change", render);
     els.levelMax.addEventListener("change", render);
+    els.classAll.addEventListener("click", function () {
+      setAllClassSelection(true);
+    });
+    els.classNone.addEventListener("click", function () {
+      setAllClassSelection(false);
+    });
     els.cardWidth.addEventListener("change", saveSettings);
     els.cardHeight.addEventListener("change", saveSettings);
 
@@ -222,6 +323,10 @@
       cardHeight: $("card-height"),
       btnPrint: $("btn-print"),
       spellCount: $("spell-count"),
+      classFilterRow: $("class-filter-row"),
+      classFilterChips: $("class-filter-chips"),
+      classAll: $("class-all"),
+      classNone: $("class-none"),
     };
   }
 
@@ -230,6 +335,8 @@
     SCG_I18N.init();
     els.uiLang.value = SCG_I18N.getLang();
     loadSettings();
+    loadClassFilterState();
+    buildClassFilterChips();
     bindEvents();
     setStatus(SCG_I18N.t("openHint"));
     render();
