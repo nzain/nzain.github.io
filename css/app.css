@@ -215,9 +215,18 @@ body {
 .card-meta {
   font-size: var(--card-font-meta);
   line-height: var(--card-line-height);
-  padding: 0.25rem 0.45rem;
+  margin: 0;
+  padding: 0.2rem 0.45rem 0.2rem;
   border-bottom: 1px solid #ddd5c8;
   flex-shrink: 0;
+}
+
+.card-meta-row {
+  display: block;
+}
+
+.card-meta-row + .card-meta-row {
+  margin-top: 0.05rem;
 }
 
 .card-meta dt {

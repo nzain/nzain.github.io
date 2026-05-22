@@ -34,11 +34,28 @@
 
     var meta = document.createElement("dl");
     meta.className = "card-meta";
-    meta.innerHTML =
+    var metaRow1 =
       metaPair(SCG_I18N.t("castingTime"), spell.castTime) +
-      metaPair(SCG_I18N.t("range"), spell.range) +
-      metaPair(SCG_I18N.t("duration"), spell.duration) +
-      (spell.components ? metaPair(SCG_I18N.t("components"), spell.components) : "");
+      metaPair(SCG_I18N.t("range"), spell.range);
+    if (metaRow1) {
+      var row1 = document.createElement("div");
+      row1.className = "card-meta-row";
+      row1.innerHTML = metaRow1;
+      meta.appendChild(row1);
+    }
+    var metaRow2 = metaPair(SCG_I18N.t("duration"), spell.duration);
+    if (metaRow2) {
+      var row2 = document.createElement("div");
+      row2.className = "card-meta-row";
+      row2.innerHTML = metaRow2;
+      meta.appendChild(row2);
+    }
+    if (spell.components) {
+      var row3 = document.createElement("div");
+      row3.className = "card-meta-row";
+      row3.innerHTML = metaPair(SCG_I18N.t("components"), spell.components);
+      meta.appendChild(row3);
+    }
 
     var body = document.createElement("div");
     body.className = "card-body";
