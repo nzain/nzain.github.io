@@ -225,8 +225,25 @@ body {
   display: block;
 }
 
+.card-meta-row--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  column-gap: 0.25rem;
+}
+
+.card-meta-row--split > .card-meta-stat--range {
+  grid-column: 2;
+}
+
 .card-meta-row + .card-meta-row {
   margin-top: 0.05rem;
+}
+
+.card-meta-stat {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
 
 .card-meta dt {
@@ -237,6 +254,30 @@ body {
 
 .card-meta dt::after {
   content: ": ";
+}
+
+.card-meta dt.card-meta-label--icon::after {
+  content: none;
+}
+
+.card-meta dt.card-meta-label--icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 0.3rem;
+}
+
+.card-meta-stat dd {
+  display: inline;
+  margin: 0;
+  min-width: 0;
+}
+
+.card-meta-label--icon svg {
+  display: block;
+  width: 0.95em;
+  height: 0.95em;
+  flex-shrink: 0;
 }
 
 .card-meta dd {

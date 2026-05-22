@@ -1,11 +1,56 @@
 (function (global) {
   "use strict";
 
+  var META_ICONS = {
+    castingTime:
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" aria-hidden="true" focusable="false">' +
+      '<circle cx="6" cy="6" r="4.5" fill="none" stroke="currentColor" stroke-width="1"/>' +
+      '<path d="M6 4v2.5l1.75 1.25" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>' +
+      "</svg>",
+    range:
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" aria-hidden="true" focusable="false">' +
+      '<path d="M2 6h5M6 3.5L10 6M6 8.5L10 6" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>' +
+      "</svg>",
+    duration:
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" aria-hidden="true" focusable="false">' +
+      '<path d="M2.5 2h7L6 6l3.5 4h-7L6 6 2.5 2z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round"/>' +
+      "</svg>",
+  };
+
   function metaPair(label, value) {
     if (!value) {
       return "";
     }
     return "<dt>" + escapeHtml(label) + "</dt><dd>" + escapeHtml(value) + "</dd>";
+  }
+
+  function metaPairIcon(kind, value) {
+    if (!value) {
+      return "";
+    }
+    var icon = META_ICONS[kind];
+    if (!icon) {
+      return metaPair(SCG_I18N.t(kind), value);
+    }
+    var label = SCG_I18N.t(kind);
+    return (
+      '<dt class="card-meta-label card-meta-label--icon" aria-label="' +
+      escapeHtml(label) +
+      '">' +
+      icon +
+      "</dt><dd>" +
+      escapeHtml(value) +
+      "</dd>"
+    );
+  }
+
+  function metaStatIcon(kind, value, statClass) {
+    var pair = metaPairIcon(kind, value);
+    if (!pair) {
+      return "";
+    }
+    var cls = "card-meta-stat" + (statClass ? " " + statClass : "");
+    return '<div class="' + cls + '">' + pair + "</div>";
   }
 
   function escapeHtml(s) {
@@ -34,20 +79,19 @@
 
     var meta = document.createElement("dl");
     meta.className = "card-meta";
-    var metaRow1 =
-      metaPair(SCG_I18N.t("castingTime"), spell.castTime) +
-      metaPair(SCG_I18N.t("range"), spell.range);
-    if (metaRow1) {
+    var castStat = metaStatIcon("castingTime", spell.castTime);
+    var rangeStat = metaStatIcon("range", spell.range, "card-meta-stat--range");
+    if (castStat || rangeStat) {
       var row1 = document.createElement("div");
-      row1.className = "card-meta-row";
-      row1.innerHTML = metaRow1;
+      row1.className = "card-meta-row card-meta-row--split";
+      row1.innerHTML = castStat + rangeStat;
       meta.appendChild(row1);
     }
-    var metaRow2 = metaPair(SCG_I18N.t("duration"), spell.duration);
-    if (metaRow2) {
+    var durationStat = metaStatIcon("duration", spell.duration);
+    if (durationStat) {
       var row2 = document.createElement("div");
       row2.className = "card-meta-row";
-      row2.innerHTML = metaRow2;
+      row2.innerHTML = durationStat;
       meta.appendChild(row2);
     }
     if (spell.components) {
