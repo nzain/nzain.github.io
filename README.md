@@ -1,4 +1,4 @@
-# Spell Card Generator
+# Spell Card Generator at https://nzain.github.io/
 
 A local, zero-install web app for D&D spell cards. Open a hardcodex-compatible CSV file, preview cards, edit descriptions in the browser, and print a 3×3 grid on A4 paper.
 
