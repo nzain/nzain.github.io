@@ -1,7 +1,6 @@
 :root {
   --toolbar-control-h: 1.625rem;
-  --card-width-mm: 63;
-  --card-height-mm: 90;
+  /* --card-width-mm / --card-height-mm: defaults in js/config.js */
   --cards-per-row: 3;
   --cards-per-col: 3;
   --ink: #1a1a1a;

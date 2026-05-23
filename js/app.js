@@ -43,12 +43,8 @@
       var w = localStorage.getItem("scg-card-width");
       var h = localStorage.getItem("scg-card-height");
       var lang = localStorage.getItem("scg-ui-lang");
-      if (w) {
-        els.cardWidth.value = w;
-      }
-      if (h) {
-        els.cardHeight.value = h;
-      }
+      els.cardWidth.value = w || String(SCG_Config.DEFAULT_CARD_WIDTH_MM);
+      els.cardHeight.value = h || String(SCG_Config.DEFAULT_CARD_HEIGHT_MM);
       if (lang) {
         els.uiLang.value = lang;
       }
@@ -65,8 +61,8 @@
   }
 
   function applyDimensions() {
-    var w = parseInt(els.cardWidth.value, 10) || 63;
-    var h = parseInt(els.cardHeight.value, 10) || 88;
+    var w = parseInt(els.cardWidth.value, 10) || SCG_Config.DEFAULT_CARD_WIDTH_MM;
+    var h = parseInt(els.cardHeight.value, 10) || SCG_Config.DEFAULT_CARD_HEIGHT_MM;
     SCG_Render.applyCardDimensions(w, h);
     if (els.grid) {
       requestAnimationFrame(function () {
