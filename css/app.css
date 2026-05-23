@@ -689,6 +689,11 @@ body {
     break-after: auto;
   }
 
+  .print-sheet-spacer {
+    width: calc(var(--card-width-mm) * 1mm);
+    height: calc(var(--card-height-mm) * 1mm);
+  }
+
   .spell-card {
     width: calc(var(--card-width-mm) * 1mm) !important;
     height: calc(var(--card-height-mm) * 1mm) !important;

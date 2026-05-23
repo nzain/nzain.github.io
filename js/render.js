@@ -121,9 +121,24 @@
     var out = [];
     for (var i = 0; i < spells.length; i += cols) {
       var row = spells.slice(i, i + cols);
-      out.push.apply(out, row.reverse());
+      while (row.length < cols) {
+        row.push(null);
+      }
+      row.reverse();
+      out.push.apply(out, row);
     }
     return out;
+  }
+
+  function appendPrintSheetBack(sheet, spell) {
+    if (spell) {
+      sheet.appendChild(buildCardBack(spell));
+      return;
+    }
+    var spacer = document.createElement("div");
+    spacer.className = "print-sheet-spacer";
+    spacer.setAttribute("aria-hidden", "true");
+    sheet.appendChild(spacer);
   }
 
   function buildCardBack(spell) {
@@ -413,7 +428,7 @@
       var backSheet = document.createElement("div");
       backSheet.className = "print-sheet print-sheet--back";
       mirrorColumnsForDuplex(pageSpells, cols).forEach(function (spell) {
-        backSheet.appendChild(buildCardBack(spell));
+        appendPrintSheetBack(backSheet, spell);
       });
       container.appendChild(backSheet);
     }
