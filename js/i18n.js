@@ -164,17 +164,12 @@
     return t("levelN", { n: n });
   }
 
-  function levelChipLabel(level) {
-    return formatLevel(level);
-  }
-
   global.SCG_I18N = {
     t: t,
     setLang: setLang,
     getLang: function () { return currentLang; },
     applyToDocument: applyToDocument,
     classLabel: classLabel,
-    levelChipLabel: levelChipLabel,
     CLASS_IDS: CLASS_IDS,
     LEVEL_IDS: LEVEL_IDS,
     formatLevel: formatLevel,

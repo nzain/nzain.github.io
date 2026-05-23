@@ -149,7 +149,7 @@
       input.checked = !!selectedLevels[key];
       var text = document.createElement("span");
       text.className = "filter-chip-label";
-      text.textContent = SCG_I18N.levelChipLabel(level);
+      text.textContent = String(level);
       input.addEventListener("change", function () {
         selectedLevels[key] = input.checked;
         saveLevelFilterState();
