@@ -97,7 +97,7 @@
       spell.range,
       spell.components,
       spell.duration,
-      spell.description,
+      SCG_Util.stripDescriptionLineBreaks(spell.description),
       spell.classes || "",
     ];
   }

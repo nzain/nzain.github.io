@@ -35,10 +35,18 @@
     } catch (e) { /* ignore */ }
   }
 
+  function stripDescriptionLineBreaks(text) {
+    if (text == null) {
+      return "";
+    }
+    return String(text).replace(/\r\n|\r|\n/g, "");
+  }
+
   global.SCG_Util = {
     escapeHtml: escapeHtml,
     mapHasTruthy: mapHasTruthy,
     readJson: readJson,
     writeJson: writeJson,
+    stripDescriptionLineBreaks: stripDescriptionLineBreaks,
   };
 })(typeof window !== "undefined" ? window : this);

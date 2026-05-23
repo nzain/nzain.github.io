@@ -100,7 +100,7 @@
       return;
     }
     var idx = openIndex;
-    var description = els.textarea.value;
+    var description = SCG_Util.stripDescriptionLineBreaks(els.textarea.value);
     var cb = onSaveCb;
     close();
     if (cb) {
