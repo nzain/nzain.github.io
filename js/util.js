@@ -42,11 +42,19 @@
     return String(text).replace(/\r\n|\r|\n/g, "");
   }
 
+  function highlightDescriptionHtml(text) {
+    var escaped = escapeHtml(text == null ? "" : String(text));
+    return escaped.replace(/&lt;\/?[\w-]+(?:\s[^&]*)?\/?&gt;/g, function (tag) {
+      return '<span class="html-tag">' + tag + "</span>";
+    });
+  }
+
   global.SCG_Util = {
     escapeHtml: escapeHtml,
     mapHasTruthy: mapHasTruthy,
     readJson: readJson,
     writeJson: writeJson,
     stripDescriptionLineBreaks: stripDescriptionLineBreaks,
+    highlightDescriptionHtml: highlightDescriptionHtml,
   };
 })(typeof window !== "undefined" ? window : this);

@@ -676,20 +676,61 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   cursor: pointer;
 }
 
-.description-editor-textarea {
+.description-editor-code-wrap {
   grid-column: 1;
   grid-row: 2;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--card-bg);
+}
+
+.description-editor-highlight {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  overflow: auto;
+  scrollbar-width: none;
+  pointer-events: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.description-editor-highlight::-webkit-scrollbar {
+  display: none;
+}
+
+.description-editor-highlight code {
+  font-family: inherit;
+}
+
+.description-editor-highlight .html-tag {
+  color: rgb(255, 0, 127);
+  font-weight: 600;
+}
+
+.description-editor-textarea {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
   padding: 0.5rem 0.65rem;
   font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
   font-size: 13px;
   line-height: 1.4;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 4px;
-  background: var(--card-bg);
-  color: var(--ink);
+  background: transparent;
+  color: transparent;
+  caret-color: var(--ink);
   resize: none;
   field-sizing: content;
 }
@@ -743,7 +784,7 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
     grid-row: 2;
   }
 
-  .description-editor-textarea {
+  .description-editor-code-wrap {
     grid-column: 1 / 3;
     grid-row: 3;
   }

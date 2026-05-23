@@ -62,8 +62,11 @@
     <h2 id="desc-editor-title" class="description-editor-title"></h2>
     <button type="button" id="desc-editor-save" class="description-editor-save" data-i18n="saveDescription">Save</button>
     <button type="button" id="desc-editor-cancel" class="description-editor-cancel" data-i18n="cancel">Cancel</button>
-    <textarea id="desc-editor-textarea" class="description-editor-textarea" spellcheck="true"
-      aria-labelledby="desc-editor-title"></textarea>
+    <div class="description-editor-code-wrap">
+      <pre class="description-editor-highlight" aria-hidden="true"><code id="desc-editor-highlight"></code></pre>
+      <textarea id="desc-editor-textarea" class="description-editor-textarea" spellcheck="false"
+        aria-labelledby="desc-editor-title"></textarea>
+    </div>
     <div id="desc-editor-preview-mount" class="description-editor-preview-mount"></div>
     <aside class="description-editor-help" data-i18n="descriptionHelp"></aside>
   </section>
