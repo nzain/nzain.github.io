@@ -320,18 +320,45 @@ body {
 }
 
 .card-header {
-  padding: 0.35rem 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.3rem 0.35rem;
   background: var(--accent);
   color: #fff;
   flex-shrink: 0;
 }
 
 .card-name {
+  flex: 1;
+  min-width: 0;
   margin: 0;
   font-size: var(--card-font-title);
   font-weight: 700;
   line-height: 1.15;
   word-break: break-word;
+}
+
+.card-header-actions {
+  display: none;
+  align-items: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
+.card-overflow-badge {
+  font-size: var(--card-font-badge);
+  font-weight: 600;
+  line-height: 1.2;
+  background: var(--warn);
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.card-edit-btn {
+  display: none;
 }
 
 .card-meta {
@@ -513,6 +540,41 @@ body {
     user-select: none;
   }
 
+  .cards-preview .spell-card.overflow-warning::after {
+    display: none;
+  }
+
+  .cards-preview .card-header-actions {
+    display: inline-flex;
+  }
+
+  .cards-preview .card-edit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 1.375rem;
+    height: 1.375rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .cards-preview .card-edit-icon {
+    display: block;
+    width: 14px;
+    height: 14px;
+  }
+
+  .cards-preview .card-edit-btn:hover,
+  .cards-preview .card-edit-btn:focus {
+    background: #fff8e8;
+    outline: none;
+  }
+
   .cards-preview.selection-active .card-pair--dimmed {
     opacity: 0.35;
     filter: grayscale(0.6);
@@ -570,6 +632,18 @@ body.is-editing-description #status {
 
 body.is-editing-description .description-editor {
   display: grid;
+}
+
+body.is-editing-description .description-editor-preview-mount .card-header-actions {
+  display: inline-flex;
+}
+
+body.is-editing-description .description-editor-preview-mount .card-edit-btn {
+  display: none;
+}
+
+body.is-editing-description .description-editor-preview-mount .spell-card.overflow-warning::after {
+  display: none;
 }
 
 .description-editor-title {

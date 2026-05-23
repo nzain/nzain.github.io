@@ -194,6 +194,26 @@
     nameEl.textContent = String(spell.level) + " " + spell.name;
     header.appendChild(nameEl);
 
+    var headerActions = document.createElement("div");
+    headerActions.className = "card-header-actions";
+
+    var overflowBadge = document.createElement("span");
+    overflowBadge.className = "card-overflow-badge";
+    overflowBadge.hidden = true;
+    headerActions.appendChild(overflowBadge);
+
+    var editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = "card-edit-btn";
+    editBtn.dataset.index = String(index);
+    editBtn.setAttribute("aria-label", SCG_I18N.t("editDescription"));
+    editBtn.innerHTML =
+      '<svg class="card-edit-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 000-1.42l-2.34-2.34a1.003 1.003 0 00-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>' +
+      "</svg>";
+    headerActions.appendChild(editBtn);
+    header.appendChild(headerActions);
+
     var meta = document.createElement("dl");
     meta.className = "card-meta";
     var castStat = metaStatIcon("castingTime", spell.castTime);
@@ -270,9 +290,19 @@
     if (face.offsetHeight > guide.offsetHeight + 2) {
       card.classList.add("overflow-warning");
       card.dataset.overflowLabel = SCG_I18N.t("overflow");
+      var badge = card.querySelector(".card-overflow-badge");
+      if (badge) {
+        badge.textContent = SCG_I18N.t("overflow");
+        badge.hidden = false;
+      }
     } else {
       card.classList.remove("overflow-warning");
       delete card.dataset.overflowLabel;
+      var overflowBadge = card.querySelector(".card-overflow-badge");
+      if (overflowBadge) {
+        overflowBadge.hidden = true;
+        overflowBadge.textContent = "";
+      }
     }
   }
 

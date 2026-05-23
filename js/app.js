@@ -215,6 +215,15 @@
     }
     hideContextMenu();
 
+    var editBtn = ev.target.closest(".card-edit-btn");
+    if (editBtn) {
+      var editIdx = parseInt(editBtn.dataset.index, 10);
+      if (!isNaN(editIdx)) {
+        startEditMode(editIdx);
+      }
+      return;
+    }
+
     var pair = ev.target.closest(".card-pair");
     if (!pair) {
       return;
