@@ -23,10 +23,6 @@
     return file.arrayBuffer().then(decodeBuffer);
   }
 
-  function decodeText(text) {
-    return text;
-  }
-
   function isHeaderRow(row) {
     if (!row || !row.length) {
       return false;

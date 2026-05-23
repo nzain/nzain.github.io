@@ -4,12 +4,12 @@
   var spells = [];
   var activeFilename = "";
   var parseErrors = [];
-  var selectedClasses = {};
-  var selectedLevels = {};
   var hasClassTags = false;
   var selectedIndices = {};
   var editingIndex = null;
   var contextMenuIndex = null;
+  var levelFilter;
+  var classFilter;
 
   var els = {};
 
@@ -44,14 +44,8 @@
     els.logPanel.innerHTML =
       "<strong>" + SCG_I18N.t("parseErrors") + ":</strong>" +
       errors.map(function (e) {
-        return '<div class="log-line">' + escapeHtml(e) + "</div>";
+        return '<div class="log-line">' + SCG_Util.escapeHtml(e) + "</div>";
       }).join("");
-  }
-
-  function escapeHtml(s) {
-    var d = document.createElement("div");
-    d.textContent = s;
-    return d.innerHTML;
   }
 
   function loadSettings() {
@@ -93,181 +87,26 @@
     });
   }
 
-  function loadLevelFilterState() {
-    SCG_I18N.LEVEL_IDS.forEach(function (level) {
-      selectedLevels[String(level)] = true;
-    });
-    try {
-      var raw = localStorage.getItem("scg-level-filter");
-      if (!raw) {
-        return;
-      }
-      var saved = JSON.parse(raw);
-      if (!saved || typeof saved !== "object") {
-        return;
-      }
-      SCG_I18N.LEVEL_IDS.forEach(function (level) {
-        var key = String(level);
-        if (Object.prototype.hasOwnProperty.call(saved, key)) {
-          selectedLevels[key] = !!saved[key];
-        }
-      });
-    } catch (e) { /* ignore */ }
-  }
-
-  function saveLevelFilterState() {
-    try {
-      localStorage.setItem("scg-level-filter", JSON.stringify(selectedLevels));
-    } catch (e) { /* ignore */ }
-  }
-
-  function getSelectedLevels() {
-    return SCG_I18N.LEVEL_IDS.filter(function (level) {
-      return selectedLevels[String(level)];
-    });
-  }
-
-  function syncLevelChipStates() {
-    if (!els.levelFilterChips) {
-      return;
-    }
-    els.levelFilterChips.querySelectorAll(".filter-chip-input").forEach(function (input) {
-      input.checked = !!selectedLevels[input.dataset.level];
-    });
-  }
-
-  function buildLevelFilterChips() {
-    els.levelFilterChips.innerHTML = "";
-    SCG_I18N.LEVEL_IDS.forEach(function (level) {
-      var key = String(level);
-      var label = document.createElement("label");
-      label.className = "filter-chip";
-      var input = document.createElement("input");
-      input.type = "checkbox";
-      input.className = "filter-chip-input";
-      input.dataset.level = key;
-      input.checked = !!selectedLevels[key];
-      var text = document.createElement("span");
-      text.className = "filter-chip-label";
-      text.textContent = String(level);
-      input.addEventListener("change", function () {
-        selectedLevels[key] = input.checked;
-        saveLevelFilterState();
-        render();
-      });
-      label.appendChild(input);
-      label.appendChild(text);
-      els.levelFilterChips.appendChild(label);
-    });
-  }
-
-  function setAllLevelSelection(on) {
-    SCG_I18N.LEVEL_IDS.forEach(function (level) {
-      selectedLevels[String(level)] = on;
-    });
-    saveLevelFilterState();
-    syncLevelChipStates();
-    render();
-  }
-
-  function loadClassFilterState() {
-    SCG_I18N.CLASS_IDS.forEach(function (id) {
-      selectedClasses[id] = true;
-    });
-    try {
-      var raw = localStorage.getItem("scg-class-filter");
-      if (!raw) {
-        return;
-      }
-      var saved = JSON.parse(raw);
-      if (!saved || typeof saved !== "object") {
-        return;
-      }
-      SCG_I18N.CLASS_IDS.forEach(function (id) {
-        if (Object.prototype.hasOwnProperty.call(saved, id)) {
-          selectedClasses[id] = !!saved[id];
-        }
-      });
-    } catch (e) { /* ignore */ }
-  }
-
-  function saveClassFilterState() {
-    try {
-      localStorage.setItem("scg-class-filter", JSON.stringify(selectedClasses));
-    } catch (e) { /* ignore */ }
-  }
-
-  function getSelectedClassIds() {
-    return SCG_I18N.CLASS_IDS.filter(function (id) {
-      return selectedClasses[id];
-    });
-  }
-
-  function syncClassChipStates() {
-    if (!els.classFilterChips) {
-      return;
-    }
-    els.classFilterChips.querySelectorAll(".filter-chip-input").forEach(function (input) {
-      input.checked = !!selectedClasses[input.dataset.classId];
-    });
-  }
-
-  function buildClassFilterChips() {
-    els.classFilterChips.innerHTML = "";
-    SCG_I18N.CLASS_IDS.forEach(function (id) {
-      var label = document.createElement("label");
-      label.className = "filter-chip";
-      var input = document.createElement("input");
-      input.type = "checkbox";
-      input.className = "filter-chip-input";
-      input.dataset.classId = id;
-      input.checked = !!selectedClasses[id];
-      var text = document.createElement("span");
-      text.className = "filter-chip-label";
-      text.textContent = SCG_I18N.classLabel(id);
-      input.addEventListener("change", function () {
-        selectedClasses[id] = input.checked;
-        saveClassFilterState();
-        render();
-      });
-      label.appendChild(input);
-      label.appendChild(text);
-      els.classFilterChips.appendChild(label);
-    });
-  }
-
-  function setAllClassSelection(on) {
-    SCG_I18N.CLASS_IDS.forEach(function (id) {
-      selectedClasses[id] = on;
-    });
-    saveClassFilterState();
-    syncClassChipStates();
-    render();
-  }
-
   function updateClassFilterVisibility() {
-    if (!els.classFilterRow) {
+    if (els.classFilterRow) {
+      els.classFilterRow.hidden = !hasClassTags;
+    }
+  }
+
+  function getCardBody(index) {
+    return els.grid.querySelector('.card-body[data-index="' + index + '"]');
+  }
+
+  function persistBody(body) {
+    if (!body) {
       return;
     }
-    els.classFilterRow.hidden = !hasClassTags;
-  }
-
-  function isSelectionActive() {
-    for (var key in selectedIndices) {
-      if (Object.prototype.hasOwnProperty.call(selectedIndices, key) && selectedIndices[key]) {
-        return true;
-      }
+    var idx = parseInt(body.dataset.index, 10);
+    if (isNaN(idx) || !spells[idx]) {
+      return;
     }
-    return false;
-  }
-
-  function toggleSelection(idx) {
-    var key = String(idx);
-    if (selectedIndices[key]) {
-      delete selectedIndices[key];
-    } else {
-      selectedIndices[key] = true;
-    }
+    spells[idx].description = body.innerHTML;
+    SCG_Render.checkOverflow(body.closest(".spell-card"));
   }
 
   function clearSelection() {
@@ -277,21 +116,23 @@
   }
 
   function updateSelectionUi() {
-    if (els.btnClearSelection) {
-      var visible = isSelectionActive();
-      els.btnClearSelection.classList.toggle("is-visible", visible);
-      els.btnClearSelection.setAttribute("aria-hidden", visible ? "false" : "true");
-      els.btnClearSelection.tabIndex = visible ? 0 : -1;
+    if (!els.btnClearSelection) {
+      return;
     }
+    var visible = SCG_Util.mapHasTruthy(selectedIndices);
+    els.btnClearSelection.classList.toggle("is-visible", visible);
+    els.btnClearSelection.setAttribute("aria-hidden", visible ? "false" : "true");
+    els.btnClearSelection.tabIndex = visible ? 0 : -1;
   }
 
   function getRenderOptions() {
     return {
-      selectedLevels: getSelectedLevels(),
+      selectedLevels: levelFilter.getSelected(),
       allLevelCount: SCG_I18N.LEVEL_IDS.length,
-      classes: getSelectedClassIds(),
+      classes: classFilter.getSelected(),
       allClassCount: SCG_I18N.CLASS_IDS.length,
       selectedIndices: selectedIndices,
+      selectionActive: SCG_Util.mapHasTruthy(selectedIndices),
       editingIndex: editingIndex,
     };
   }
@@ -309,9 +150,7 @@
       return;
     }
     requestAnimationFrame(function () {
-      var body = els.grid.querySelector(
-        '.card-body[data-index="' + editingIndex + '"]'
-      );
+      var body = getCardBody(editingIndex);
       if (!body) {
         return;
       }
@@ -380,56 +219,25 @@
       });
   }
 
-  function saveEditingBody(body) {
-    if (!body) {
-      return;
-    }
-    var idx = parseInt(body.dataset.index, 10);
-    if (isNaN(idx) || !spells[idx]) {
-      return;
-    }
-    spells[idx].description = body.innerHTML;
-    SCG_Render.checkOverflow(body.closest(".spell-card"));
-  }
-
   function exitEditMode() {
     if (editingIndex == null) {
       return;
     }
-    var body = els.grid.querySelector(
-      '.card-body[data-index="' + editingIndex + '"]'
-    );
-    if (body) {
-      saveEditingBody(body);
-    }
+    persistBody(getCardBody(editingIndex));
     editingIndex = null;
     render();
   }
 
   function startEditMode(idx) {
     if (editingIndex != null && editingIndex !== idx) {
-      var prevBody = els.grid.querySelector(
-        '.card-body[data-index="' + editingIndex + '"]'
-      );
-      if (prevBody) {
-        saveEditingBody(prevBody);
-      }
+      persistBody(getCardBody(editingIndex));
     }
     editingIndex = idx;
     render();
   }
 
   function onBodyEdit(ev) {
-    var body = ev.target.closest(".card-body");
-    if (!body) {
-      return;
-    }
-    var idx = parseInt(body.dataset.index, 10);
-    if (isNaN(idx) || !spells[idx]) {
-      return;
-    }
-    spells[idx].description = body.innerHTML;
-    SCG_Render.checkOverflow(body.closest(".spell-card"));
+    persistBody(ev.target.closest(".card-body"));
   }
 
   function hideContextMenu() {
@@ -465,7 +273,12 @@
     if (isNaN(idx)) {
       return;
     }
-    toggleSelection(idx);
+    var key = String(idx);
+    if (selectedIndices[key]) {
+      delete selectedIndices[key];
+    } else {
+      selectedIndices[key] = true;
+    }
     render();
   }
 
@@ -514,15 +327,11 @@
     }
   }
 
-  function getExportSpells() {
-    return spells.slice();
-  }
-
   function onExport() {
     if (!spells.length) {
       return;
     }
-    var out = SCG_CSV.exportBlob(getExportSpells(), activeFilename || "spells.csv");
+    var out = SCG_CSV.exportBlob(spells, activeFilename || "spells.csv");
     var url = URL.createObjectURL(out.blob);
     var a = document.createElement("a");
     a.href = url;
@@ -540,6 +349,23 @@
     window.print();
   }
 
+  function initFilters() {
+    levelFilter = SCG_Filters.createChipFilter({
+      storageKey: "scg-level-filter",
+      ids: SCG_I18N.LEVEL_IDS,
+      dataAttr: "level",
+      getLabel: String,
+      onChange: render,
+    });
+    classFilter = SCG_Filters.createChipFilter({
+      storageKey: "scg-class-filter",
+      ids: SCG_I18N.CLASS_IDS,
+      dataAttr: "classId",
+      getLabel: SCG_I18N.classLabel,
+      onChange: render,
+    });
+  }
+
   function bindEvents() {
     els.btnOpen.addEventListener("click", onOpenClick);
     els.fileInput.addEventListener("change", onFileSelected);
@@ -549,8 +375,8 @@
 
     els.uiLang.addEventListener("change", function () {
       SCG_I18N.setLang(els.uiLang.value);
-      buildLevelFilterChips();
-      buildClassFilterChips();
+      levelFilter.buildChips(els.levelFilterChips);
+      classFilter.buildChips(els.classFilterChips);
       render();
       if (!els.status.classList.contains("error")) {
         showDefaultStatus();
@@ -558,16 +384,16 @@
     });
 
     els.levelAll.addEventListener("click", function () {
-      setAllLevelSelection(true);
+      levelFilter.setAll(true);
     });
     els.levelNone.addEventListener("click", function () {
-      setAllLevelSelection(false);
+      levelFilter.setAll(false);
     });
     els.classAll.addEventListener("click", function () {
-      setAllClassSelection(true);
+      classFilter.setAll(true);
     });
     els.classNone.addEventListener("click", function () {
-      setAllClassSelection(false);
+      classFilter.setAll(false);
     });
     els.cardWidth.addEventListener("change", saveSettings);
     els.cardHeight.addEventListener("change", saveSettings);
@@ -625,13 +451,14 @@
 
   function boot() {
     initEls();
+    initFilters();
     SCG_I18N.init();
     els.uiLang.value = SCG_I18N.getLang();
     loadSettings();
-    loadLevelFilterState();
-    loadClassFilterState();
-    buildLevelFilterChips();
-    buildClassFilterChips();
+    levelFilter.load();
+    classFilter.load();
+    levelFilter.buildChips(els.levelFilterChips);
+    classFilter.buildChips(els.classFilterChips);
     bindEvents();
     showDefaultStatus();
     render();

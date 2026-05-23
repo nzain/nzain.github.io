@@ -8,29 +8,6 @@
 
   var ALLOWED_ATTR = ["class", "href"];
 
-  function hookHref(current, hookEvent, config) {
-    if (hookEvent.attrName !== "href") {
-      return current;
-    }
-    var val = String(hookEvent.attrValue || "").trim();
-    if (/^\d+$/.test(val)) {
-      hookEvent.keepAttr = true;
-      return val;
-    }
-    return false;
-  }
-
-  function hookClass(current, hookEvent, config) {
-    if (hookEvent.attrName !== "class") {
-      return current;
-    }
-    if (hookEvent.tagName === "span" && hookEvent.attrValue === "nameref") {
-      hookEvent.keepAttr = true;
-      return "nameref";
-    }
-    return false;
-  }
-
   function configurePurify() {
     if (typeof DOMPurify === "undefined") {
       return;

@@ -49,18 +49,11 @@
     if (!value) {
       return "";
     }
-    return "<dt>" + escapeHtml(label) + "</dt><dd>" + escapeHtml(value) + "</dd>";
-  }
-
-  function metaValue(value) {
-    if (!value) {
-      return "";
-    }
-    return "<dd>" + escapeHtml(value) + "</dd>";
+    return "<dt>" + SCG_Util.escapeHtml(label) + "</dt><dd>" + SCG_Util.escapeHtml(value) + "</dd>";
   }
 
   function formatComponentsHtml(value) {
-    return escapeHtml(value).replace(/\([^)]*\)/g, function (segment) {
+    return SCG_Util.escapeHtml(value).replace(/\([^)]*\)/g, function (segment) {
       return "<b>" + segment + "</b>";
     });
   }
@@ -76,11 +69,11 @@
     var label = SCG_I18N.t(kind);
     return (
       '<dt class="card-meta-label card-meta-label--icon" aria-label="' +
-      escapeHtml(label) +
+      SCG_Util.escapeHtml(label) +
       '">' +
       icon +
       "</dt><dd>" +
-      (ddHtml != null ? ddHtml : escapeHtml(value)) +
+      (ddHtml != null ? ddHtml : SCG_Util.escapeHtml(value)) +
       "</dd>"
     );
   }
@@ -92,12 +85,6 @@
     }
     var cls = "card-meta-stat" + (statClass ? " " + statClass : "");
     return '<div class="' + cls + '">' + pair + "</div>";
-  }
-
-  function escapeHtml(s) {
-    var d = document.createElement("div");
-    d.textContent = s;
-    return d.innerHTML;
   }
 
   function normalizeSchoolKey(school) {
@@ -350,15 +337,7 @@
     var selectedIndices = options.selectedIndices || null;
     var editingIndex =
       options.editingIndex != null ? options.editingIndex : null;
-    var selectionActive = false;
-    if (selectedIndices) {
-      for (var selKey in selectedIndices) {
-        if (Object.prototype.hasOwnProperty.call(selectedIndices, selKey) && selectedIndices[selKey]) {
-          selectionActive = true;
-          break;
-        }
-      }
-    }
+    var selectionActive = !!options.selectionActive;
     container.innerHTML = "";
 
     var visible = spells.filter(function (s) {
