@@ -435,6 +435,30 @@ body {
   text-align: right;
 }
 
+.cards-preview {
+  display: grid;
+  grid-template-columns: repeat(var(--cards-per-row), calc(var(--card-width-mm) * 1mm));
+  gap: 1.5rem;
+  justify-content: center;
+  width: 100%;
+  max-width: calc(
+    var(--card-width-mm) * var(--cards-per-row) * 1mm +
+    (var(--cards-per-row) - 1) * 1.5rem +
+    2rem
+  );
+}
+
+.card-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: calc(var(--card-width-mm) * 1mm);
+}
+
+.card-pair .spell-card--back {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
 .spell-card--back {
   background: var(--card-bg);
 }
@@ -446,13 +470,36 @@ body {
 }
 
 .card-back-frame {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  border: calc(var(--card-back-border-mm) * 1mm) solid var(--border);
+  border: none;
   background: var(--card-bg);
+  padding: calc(var(--card-back-border-mm) * 0.65 * 1mm);
+  overflow: visible;
+}
+
+.card-back-border-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--border);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card-back-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 }
 
 .card-back-slot {
@@ -483,7 +530,7 @@ body {
 }
 
 @media screen {
-  .print-sheet--back {
+  .print-sheet {
     display: none;
   }
 }
@@ -515,6 +562,10 @@ body {
     display: block;
     padding: 0;
     margin: 0;
+  }
+
+  .cards-preview {
+    display: none !important;
   }
 
   .print-sheet {
@@ -580,8 +631,12 @@ body {
     min-height: 0;
   }
 
+  .card-back-border-svg {
+    color: #000;
+  }
+
   .card-back-frame {
-    border-color: #000;
+    background: var(--card-bg);
   }
 
   .empty-state {

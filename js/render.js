@@ -136,13 +136,18 @@
     var frame = document.createElement("div");
     frame.className = "card-back-frame";
 
+    frame.appendChild(SCG_Borders.createBorderSvg());
+
+    var content = document.createElement("div");
+    content.className = "card-back-content";
+
     var levelWrap = document.createElement("div");
     levelWrap.className = "card-back-slot card-back-slot--level";
     var levelEl = document.createElement("span");
     levelEl.className = "card-back-level";
     levelEl.textContent = String(spell.level);
     levelWrap.appendChild(levelEl);
-    frame.appendChild(levelWrap);
+    content.appendChild(levelWrap);
 
     var slug = schoolToIconSlug(spell.school);
     var schoolWrap = document.createElement("div");
@@ -154,7 +159,7 @@
       schoolImg.setAttribute("aria-hidden", "true");
       schoolWrap.appendChild(schoolImg);
     }
-    frame.appendChild(schoolWrap);
+    content.appendChild(schoolWrap);
 
     var logoWrap = document.createElement("div");
     logoWrap.className = "card-back-slot card-back-slot--logo";
@@ -163,7 +168,9 @@
     logoImg.alt = "";
     logoImg.setAttribute("aria-hidden", "true");
     logoWrap.appendChild(logoImg);
-    frame.appendChild(logoWrap);
+    content.appendChild(logoWrap);
+
+    frame.appendChild(content);
 
     back.appendChild(frame);
     article.appendChild(back);
@@ -344,6 +351,19 @@
     var perPage =
       (options.cardsPerRow || 3) * (options.cardsPerCol || 3);
     var cols = options.cardsPerRow || 3;
+
+    var preview = document.createElement("div");
+    preview.className = "cards-preview";
+    filtered.forEach(function (spell) {
+      var pair = document.createElement("div");
+      pair.className = "card-pair";
+      var idx = spells.indexOf(spell);
+      pair.appendChild(buildCard(spell, idx));
+      pair.appendChild(buildCardBack(spell));
+      preview.appendChild(pair);
+    });
+    container.appendChild(preview);
+
     for (var p = 0; p < filtered.length; p += perPage) {
       var pageSpells = filtered.slice(p, Math.min(p + perPage, filtered.length));
 
