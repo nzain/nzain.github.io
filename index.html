@@ -18,6 +18,7 @@
       <div class="file-actions">
         <button type="button" id="btn-open" data-i18n="openCsv">Open CSV…</button>
         <button type="button" id="btn-export" disabled data-i18n="exportCsv">Export CSV…</button>
+        <button type="button" id="btn-clear-selection" hidden data-i18n="clearSelection">Clear selection</button>
         <button type="button" id="btn-print" data-i18n="print">Print</button>
         <input type="file" id="file-input" accept=".csv,text/csv" hidden>
       </div>
@@ -56,6 +57,10 @@
   <div class="log-panel" id="log-panel" hidden></div>
 
   <main class="cards-grid" id="cards-grid"></main>
+
+  <div id="card-context-menu" class="card-context-menu" role="menu" hidden>
+    <button type="button" class="card-context-menu-item" data-context-action="edit" data-i18n="editDescription" role="menuitem">Edit description</button>
+  </div>
 
   <script src="vendor/papaparse.min.js"></script>
   <script src="vendor/purify.min.js"></script>

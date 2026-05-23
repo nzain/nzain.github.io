@@ -6,6 +6,9 @@
   var parseErrors = [];
   var selectedClasses = {};
   var hasClassTags = false;
+  var selectedIndices = {};
+  var editingIndex = null;
+  var contextMenuIndex = null;
 
   var els = {};
 
@@ -159,20 +162,60 @@
     els.classFilterRow.hidden = !hasClassTags;
   }
 
+  function isSelectionActive() {
+    for (var key in selectedIndices) {
+      if (Object.prototype.hasOwnProperty.call(selectedIndices, key) && selectedIndices[key]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function toggleSelection(idx) {
+    var key = String(idx);
+    if (selectedIndices[key]) {
+      delete selectedIndices[key];
+    } else {
+      selectedIndices[key] = true;
+    }
+  }
+
+  function clearSelection() {
+    selectedIndices = {};
+    updateSelectionUi();
+    render();
+  }
+
+  function updateSelectionUi() {
+    if (els.btnClearSelection) {
+      els.btnClearSelection.hidden = !isSelectionActive();
+    }
+  }
+
   function getRenderOptions() {
     return {
       levelMin: parseInt(els.levelMin.value, 10) || 0,
       levelMax: parseInt(els.levelMax.value, 10) || 9,
       classes: getSelectedClassIds(),
       allClassCount: SCG_I18N.CLASS_IDS.length,
+      selectedIndices: selectedIndices,
+      editingIndex: editingIndex,
     };
   }
 
   function updateSpellCount(stats) {
-    els.spellCount.textContent = SCG_I18N.t("spellCount", {
-      shown: stats.shown,
-      total: stats.total,
-    });
+    if (stats.selected > 0) {
+      els.spellCount.textContent = SCG_I18N.t("spellCountSelected", {
+        selected: stats.selected,
+        shown: stats.shown,
+        total: stats.total,
+      });
+    } else {
+      els.spellCount.textContent = SCG_I18N.t("spellCount", {
+        shown: stats.shown,
+        total: stats.total,
+      });
+    }
   }
 
   function updateActiveFileLabel() {
@@ -185,11 +228,38 @@
     }
   }
 
+  function focusEditingBody() {
+    if (editingIndex == null) {
+      return;
+    }
+    requestAnimationFrame(function () {
+      var body = els.grid.querySelector(
+        '.card-body[data-index="' + editingIndex + '"]'
+      );
+      if (!body) {
+        return;
+      }
+      body.focus();
+      var range = document.createRange();
+      range.selectNodeContents(body);
+      range.collapse(false);
+      var sel = window.getSelection();
+      if (sel) {
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+  }
+
   function render() {
     var stats = SCG_Render.renderGrid(els.grid, spells, getRenderOptions());
     updateSpellCount(stats);
+    updateSelectionUi();
     requestAnimationFrame(function () {
       SCG_Render.checkAllOverflow(els.grid);
+      if (editingIndex != null) {
+        focusEditingBody();
+      }
     });
   }
 
@@ -197,6 +267,9 @@
     spells = newSpells;
     parseErrors = errors || [];
     hasClassTags = spellsHaveClassTags(spells);
+    selectedIndices = {};
+    editingIndex = null;
+    hideContextMenu();
     if (filename) {
       activeFilename = filename;
     }
@@ -232,6 +305,45 @@
       });
   }
 
+  function saveEditingBody(body) {
+    if (!body) {
+      return;
+    }
+    var idx = parseInt(body.dataset.index, 10);
+    if (isNaN(idx) || !spells[idx]) {
+      return;
+    }
+    spells[idx].description = body.innerHTML;
+    SCG_Render.checkOverflow(body.closest(".spell-card"));
+  }
+
+  function exitEditMode() {
+    if (editingIndex == null) {
+      return;
+    }
+    var body = els.grid.querySelector(
+      '.card-body[data-index="' + editingIndex + '"]'
+    );
+    if (body) {
+      saveEditingBody(body);
+    }
+    editingIndex = null;
+    render();
+  }
+
+  function startEditMode(idx) {
+    if (editingIndex != null && editingIndex !== idx) {
+      var prevBody = els.grid.querySelector(
+        '.card-body[data-index="' + editingIndex + '"]'
+      );
+      if (prevBody) {
+        saveEditingBody(prevBody);
+      }
+    }
+    editingIndex = idx;
+    render();
+  }
+
   function onBodyEdit(ev) {
     var body = ev.target.closest(".card-body");
     if (!body) {
@@ -242,11 +354,93 @@
       return;
     }
     spells[idx].description = body.innerHTML;
-    if (!spells[idx].dirty) {
-      spells[idx].dirty = true;
-      body.closest(".spell-card").classList.add("dirty");
-    }
     SCG_Render.checkOverflow(body.closest(".spell-card"));
+  }
+
+  function hideContextMenu() {
+    if (els.cardContextMenu) {
+      els.cardContextMenu.hidden = true;
+    }
+    contextMenuIndex = null;
+  }
+
+  function showContextMenu(x, y, idx) {
+    contextMenuIndex = idx;
+    els.cardContextMenu.hidden = false;
+    els.cardContextMenu.style.left = x + "px";
+    els.cardContextMenu.style.top = y + "px";
+  }
+
+  function onGridClick(ev) {
+    if (ev.target.closest("#card-context-menu")) {
+      return;
+    }
+    hideContextMenu();
+
+    var body = ev.target.closest(".card-body");
+    if (body && editingIndex != null && parseInt(body.dataset.index, 10) === editingIndex) {
+      return;
+    }
+
+    var pair = ev.target.closest(".card-pair");
+    if (!pair) {
+      return;
+    }
+    var idx = parseInt(pair.dataset.index, 10);
+    if (isNaN(idx)) {
+      return;
+    }
+    var wasActive = isSelectionActive();
+    toggleSelection(idx);
+    if (!wasActive && isSelectionActive()) {
+      setStatus(SCG_I18N.t("selectionHint"));
+    }
+    render();
+  }
+
+  function onGridContextMenu(ev) {
+    var pair = ev.target.closest(".card-pair");
+    if (!pair) {
+      hideContextMenu();
+      return;
+    }
+    ev.preventDefault();
+    var idx = parseInt(pair.dataset.index, 10);
+    if (isNaN(idx)) {
+      return;
+    }
+    showContextMenu(ev.clientX, ev.clientY, idx);
+  }
+
+  function onContextMenuAction(ev) {
+    var btn = ev.target.closest("[data-context-action]");
+    if (!btn || contextMenuIndex == null) {
+      return;
+    }
+    hideContextMenu();
+    if (btn.dataset.contextAction === "edit") {
+      startEditMode(contextMenuIndex);
+    }
+  }
+
+  function onGridKeyDown(ev) {
+    if (ev.key === "Escape") {
+      if (!els.cardContextMenu.hidden) {
+        hideContextMenu();
+        ev.preventDefault();
+        return;
+      }
+      if (editingIndex != null) {
+        exitEditMode();
+        ev.preventDefault();
+      }
+    }
+  }
+
+  function onDocumentClick(ev) {
+    if (!ev.target.closest("#card-context-menu")) {
+      hideContextMenu();
+    }
   }
 
   function getExportSpells() {
@@ -277,6 +471,7 @@
     els.fileInput.addEventListener("change", onFileSelected);
     els.btnPrint.addEventListener("click", onPrint);
     els.btnExport.addEventListener("click", onExport);
+    els.btnClearSelection.addEventListener("click", clearSelection);
 
     els.uiLang.addEventListener("change", function () {
       SCG_I18N.setLang(els.uiLang.value);
@@ -297,6 +492,25 @@
     els.cardHeight.addEventListener("change", saveSettings);
 
     els.grid.addEventListener("input", onBodyEdit);
+    els.grid.addEventListener("click", onGridClick);
+    els.grid.addEventListener("contextmenu", onGridContextMenu);
+    els.grid.addEventListener("keydown", onGridKeyDown);
+    els.grid.addEventListener("focusout", function (ev) {
+      if (editingIndex == null) {
+        return;
+      }
+      var body = ev.target.closest(".card-body");
+      if (!body || parseInt(body.dataset.index, 10) !== editingIndex) {
+        return;
+      }
+      var related = ev.relatedTarget;
+      if (related && body.contains(related)) {
+        return;
+      }
+      exitEditMode();
+    });
+    els.cardContextMenu.addEventListener("click", onContextMenuAction);
+    document.addEventListener("click", onDocumentClick);
 
     window.addEventListener("resize", function () {
       SCG_Render.checkAllOverflow(els.grid);
@@ -318,11 +532,13 @@
       cardWidth: $("card-width"),
       cardHeight: $("card-height"),
       btnPrint: $("btn-print"),
+      btnClearSelection: $("btn-clear-selection"),
       spellCount: $("spell-count"),
       classFilterRow: $("class-filter-row"),
       classFilterChips: $("class-filter-chips"),
       classAll: $("class-all"),
       classNone: $("class-none"),
+      cardContextMenu: $("card-context-menu"),
     };
   }
 

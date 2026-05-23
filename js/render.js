@@ -177,13 +177,10 @@
     return article;
   }
 
-  function buildCard(spell, index) {
+  function buildCard(spell, index, isEditing) {
     var article = document.createElement("article");
     article.className = "spell-card";
     article.dataset.index = String(index);
-    if (spell.dirty) {
-      article.classList.add("dirty");
-    }
 
     var face = document.createElement("div");
     face.className = "card-face";
@@ -221,8 +218,10 @@
 
     var body = document.createElement("div");
     body.className = "card-body";
-    body.contentEditable = "true";
-    body.spellcheck = true;
+    if (isEditing) {
+      body.contentEditable = "true";
+      body.spellcheck = true;
+    }
     body.dataset.index = String(index);
     body.innerHTML = SCG_Sanitize.sanitizeDescription(spell.description);
 
@@ -326,9 +325,21 @@
       selectedClasses &&
       selectedClasses.length &&
       selectedClasses.length < allClassCount;
+    var selectedIndices = options.selectedIndices || null;
+    var editingIndex =
+      options.editingIndex != null ? options.editingIndex : null;
+    var selectionActive = false;
+    if (selectedIndices) {
+      for (var selKey in selectedIndices) {
+        if (Object.prototype.hasOwnProperty.call(selectedIndices, selKey) && selectedIndices[selKey]) {
+          selectionActive = true;
+          break;
+        }
+      }
+    }
     container.innerHTML = "";
 
-    var filtered = spells.filter(function (s) {
+    var visible = spells.filter(function (s) {
       if (s.level < levelMin || s.level > levelMax) {
         return false;
       }
@@ -338,15 +349,23 @@
       return true;
     });
 
-    if (!filtered.length) {
+    if (!visible.length) {
       var empty = document.createElement("p");
       empty.className = "empty-state";
       empty.textContent = spells.length
         ? SCG_I18N.t("noMatchFilter")
         : SCG_I18N.t("noSpells");
       container.appendChild(empty);
-      return { shown: 0, total: spells.length };
+      return { shown: 0, total: spells.length, selected: 0 };
     }
+
+    var printable = selectionActive
+      ? visible.filter(function (s) {
+          return selectedIndices[String(spells.indexOf(s))];
+        })
+      : visible.slice();
+
+    var selectedCount = selectionActive ? printable.length : 0;
 
     var perPage =
       (options.cardsPerRow || 3) * (options.cardsPerCol || 3);
@@ -354,24 +373,35 @@
 
     var preview = document.createElement("div");
     preview.className = "cards-preview";
-    filtered.forEach(function (spell) {
+    if (selectionActive) {
+      preview.classList.add("selection-active");
+    }
+    visible.forEach(function (spell) {
       var pair = document.createElement("div");
       pair.className = "card-pair";
       var idx = spells.indexOf(spell);
-      pair.appendChild(buildCard(spell, idx));
+      pair.dataset.index = String(idx);
+      if (selectionActive) {
+        if (selectedIndices[String(idx)]) {
+          pair.classList.add("card-pair--selected");
+        } else {
+          pair.classList.add("card-pair--dimmed");
+        }
+      }
+      pair.appendChild(buildCard(spell, idx, idx === editingIndex));
       pair.appendChild(buildCardBack(spell));
       preview.appendChild(pair);
     });
     container.appendChild(preview);
 
-    for (var p = 0; p < filtered.length; p += perPage) {
-      var pageSpells = filtered.slice(p, Math.min(p + perPage, filtered.length));
+    for (var p = 0; p < printable.length; p += perPage) {
+      var pageSpells = printable.slice(p, Math.min(p + perPage, printable.length));
 
       var frontSheet = document.createElement("div");
       frontSheet.className = "print-sheet print-sheet--front";
       pageSpells.forEach(function (spell) {
         var idx = spells.indexOf(spell);
-        frontSheet.appendChild(buildCard(spell, idx));
+        frontSheet.appendChild(buildCard(spell, idx, false));
       });
       container.appendChild(frontSheet);
 
@@ -387,7 +417,7 @@
       checkAllOverflow(container);
     });
 
-    return { shown: filtered.length, total: spells.length };
+    return { shown: visible.length, total: spells.length, selected: selectedCount };
   }
 
   function applyCardDimensions(widthMm, heightMm) {

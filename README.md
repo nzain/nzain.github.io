@@ -21,10 +21,11 @@ Encoding: UTF-8 preferred; Windows-codepage worked for me, too.
 - Print layout: **3 × 3 cards per A4 portrait page**.
 - Test print preview in Firefox and Chrome/Edge; margins may differ slightly between browsers.
 
-## Editing and export
+## Editing, selection, and export
 
 - Often spell descriptions are lengthy and overwhelming: print layout overflow is indicated in the web UI.
-- Click a card **description** to edit inline (dirty cards show an orange outline).
+- **Click a card** (front or back) to include it in a print selection. Unselected cards are dimmed once any card is picked; use **Clear selection** to print all visible cards again.
+- **Right-click a card** and choose **Edit description** to change the text inline. Press Escape or click outside to finish editing.
 - **Export CSV…** downloads the current list (including your edits).
 
 ## Privacy

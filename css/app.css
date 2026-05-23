@@ -237,11 +237,6 @@ body {
   border: 1px solid var(--border);
 }
 
-.spell-card.dirty {
-  outline: 2px solid var(--warn);
-  outline-offset: 2px;
-}
-
 .card-face {
   width: 100%;
   min-height: calc(var(--card-height-mm) * 1mm);
@@ -457,6 +452,56 @@ body {
 
 .card-pair .spell-card--back {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+@media screen {
+  .cards-preview .card-pair,
+  .cards-preview .card-body {
+    cursor: pointer;
+  }
+
+  .cards-preview .card-body[contenteditable="true"] {
+    cursor: text;
+    user-select: text;
+  }
+
+  .cards-preview .card-body:not([contenteditable="true"]) {
+    user-select: none;
+  }
+
+  .cards-preview.selection-active .card-pair--dimmed {
+    opacity: 0.35;
+    filter: grayscale(0.6);
+    transition: opacity 0.15s, filter 0.15s;
+  }
+}
+
+.card-context-menu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 10rem;
+  padding: 0.25rem 0;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-context-menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0.75rem;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.card-context-menu-item:hover,
+.card-context-menu-item:focus {
+  background: var(--accent-soft, #e8f0fa);
+  outline: none;
 }
 
 .spell-card--back {

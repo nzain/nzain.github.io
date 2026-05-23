@@ -50,7 +50,6 @@
       duration: (row[6] || "").trim(),
       description: row[7] != null ? String(row[7]) : "",
       classes: (row[8] || "").trim(),
-      dirty: false,
     };
   }
 
