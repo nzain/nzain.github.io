@@ -509,12 +509,7 @@ body {
     cursor: pointer;
   }
 
-  .cards-preview .card-body[contenteditable="true"] {
-    cursor: text;
-    user-select: text;
-  }
-
-  .cards-preview .card-body:not([contenteditable="true"]) {
+  .cards-preview .card-body {
     user-select: none;
   }
 
@@ -551,6 +546,103 @@ body {
 .card-context-menu-item:focus {
   background: var(--accent-soft, #e8f0fa);
   outline: none;
+}
+
+body.is-editing-description #cards-grid {
+  display: none;
+}
+
+.description-editor {
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.description-editor-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.description-editor-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.description-editor-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.description-editor-actions button {
+  min-height: var(--toolbar-control-h);
+  padding: 0.25rem 0.75rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.description-editor-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.description-editor-source label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.description-editor-source textarea {
+  display: block;
+  width: 100%;
+  min-height: 20rem;
+  padding: 0.5rem 0.65rem;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--card-bg);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.description-editor-help {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  color: var(--ink);
+  background: var(--toolbar-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.description-editor-preview-label {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.description-editor-preview-mount {
+  display: flex;
+  justify-content: center;
+}
+
+.description-editor-preview-mount .spell-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 900px) {
+  .description-editor-body {
+    grid-template-columns: 1fr;
+  }
 }
 
 .spell-card--back {

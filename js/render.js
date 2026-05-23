@@ -179,7 +179,7 @@
     return article;
   }
 
-  function buildCard(spell, index, isEditing) {
+  function buildCard(spell, index) {
     var article = document.createElement("article");
     article.className = "spell-card";
     article.dataset.index = String(index);
@@ -220,10 +220,6 @@
 
     var body = document.createElement("div");
     body.className = "card-body";
-    if (isEditing) {
-      body.contentEditable = "true";
-      body.spellcheck = true;
-    }
     body.dataset.index = String(index);
     body.innerHTML = SCG_Sanitize.sanitizeDescription(spell.description);
 
@@ -335,8 +331,6 @@
       selectedClasses.length &&
       selectedClasses.length < allClassCount;
     var selectedIndices = options.selectedIndices || null;
-    var editingIndex =
-      options.editingIndex != null ? options.editingIndex : null;
     var selectionActive = !!options.selectionActive;
     container.innerHTML = "";
 
@@ -387,7 +381,7 @@
           pair.classList.add("card-pair--dimmed");
         }
       }
-      pair.appendChild(buildCard(spell, idx, idx === editingIndex));
+      pair.appendChild(buildCard(spell, idx));
       pair.appendChild(buildCardBack(spell));
       preview.appendChild(pair);
     });
@@ -400,7 +394,7 @@
       frontSheet.className = "print-sheet print-sheet--front";
       pageSpells.forEach(function (spell) {
         var idx = spells.indexOf(spell);
-        frontSheet.appendChild(buildCard(spell, idx, false));
+        frontSheet.appendChild(buildCard(spell, idx));
       });
       container.appendChild(frontSheet);
 

@@ -25,7 +25,7 @@ Encoding: UTF-8 preferred; Windows-codepage worked for me, too.
 
 - Often spell descriptions are lengthy and overwhelming: print layout overflow is indicated in the web UI.
 - **Click a card** (front or back) to include it in a print selection. Unselected cards are dimmed once any card is picked; use **Clear selection** to print all visible cards again.
-- **Right-click a card** and choose **Edit description** to change the text inline. Press Escape or click outside to finish editing.
+- **Right-click a card** and choose **Edit description** to open a split-pane editor: raw HTML on the left, live card preview on the right. Save or Cancel (Escape discards changes).
 - **Export CSV…** downloads the current list (including your edits).
 
 ## Privacy

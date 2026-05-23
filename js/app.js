@@ -6,7 +6,6 @@
   var parseErrors = [];
   var hasClassTags = false;
   var selectedIndices = {};
-  var editingIndex = null;
   var contextMenuIndex = null;
   var levelFilter;
   var classFilter;
@@ -77,6 +76,9 @@
     if (els.grid) {
       requestAnimationFrame(function () {
         SCG_Render.checkAllOverflow(els.grid);
+        if (SCG_Editor.isOpen()) {
+          SCG_Editor.refreshPreview();
+        }
       });
     }
   }
@@ -91,22 +93,6 @@
     if (els.classFilterRow) {
       els.classFilterRow.hidden = !hasClassTags;
     }
-  }
-
-  function getCardBody(index) {
-    return els.grid.querySelector('.card-body[data-index="' + index + '"]');
-  }
-
-  function persistBody(body) {
-    if (!body) {
-      return;
-    }
-    var idx = parseInt(body.dataset.index, 10);
-    if (isNaN(idx) || !spells[idx]) {
-      return;
-    }
-    spells[idx].description = body.innerHTML;
-    SCG_Render.checkOverflow(body.closest(".spell-card"));
   }
 
   function clearSelection() {
@@ -133,7 +119,6 @@
       allClassCount: SCG_I18N.CLASS_IDS.length,
       selectedIndices: selectedIndices,
       selectionActive: SCG_Util.mapHasTruthy(selectedIndices),
-      editingIndex: editingIndex,
     };
   }
 
@@ -145,36 +130,12 @@
     els.btnPrint.disabled = stats.printed === 0;
   }
 
-  function focusEditingBody() {
-    if (editingIndex == null) {
-      return;
-    }
-    requestAnimationFrame(function () {
-      var body = getCardBody(editingIndex);
-      if (!body) {
-        return;
-      }
-      body.focus();
-      var range = document.createRange();
-      range.selectNodeContents(body);
-      range.collapse(false);
-      var sel = window.getSelection();
-      if (sel) {
-        sel.removeAllRanges();
-        sel.addRange(range);
-      }
-    });
-  }
-
   function render() {
     var stats = SCG_Render.renderGrid(els.grid, spells, getRenderOptions());
     updatePrintButton(stats);
     updateSelectionUi();
     requestAnimationFrame(function () {
       SCG_Render.checkAllOverflow(els.grid);
-      if (editingIndex != null) {
-        focusEditingBody();
-      }
     });
   }
 
@@ -183,7 +144,7 @@
     parseErrors = errors || [];
     hasClassTags = spellsHaveClassTags(spells);
     selectedIndices = {};
-    editingIndex = null;
+    SCG_Editor.close();
     hideContextMenu();
     if (filename) {
       activeFilename = filename;
@@ -219,25 +180,19 @@
       });
   }
 
-  function exitEditMode() {
-    if (editingIndex == null) {
+  function startEditMode(idx) {
+    if (!spells[idx]) {
       return;
     }
-    persistBody(getCardBody(editingIndex));
-    editingIndex = null;
-    render();
-  }
-
-  function startEditMode(idx) {
-    if (editingIndex != null && editingIndex !== idx) {
-      persistBody(getCardBody(editingIndex));
-    }
-    editingIndex = idx;
-    render();
-  }
-
-  function onBodyEdit(ev) {
-    persistBody(ev.target.closest(".card-body"));
+    SCG_Editor.open({
+      index: idx,
+      spell: spells[idx],
+      onSave: function (index, description) {
+        spells[index].description = description;
+        render();
+      },
+      onCancel: function () { /* discard draft */ },
+    });
   }
 
   function hideContextMenu() {
@@ -259,11 +214,6 @@
       return;
     }
     hideContextMenu();
-
-    var body = ev.target.closest(".card-body");
-    if (body && editingIndex != null && parseInt(body.dataset.index, 10) === editingIndex) {
-      return;
-    }
 
     var pair = ev.target.closest(".card-pair");
     if (!pair) {
@@ -301,23 +251,17 @@
     if (!btn || contextMenuIndex == null) {
       return;
     }
+    var idx = contextMenuIndex;
     hideContextMenu();
     if (btn.dataset.contextAction === "edit") {
-      startEditMode(contextMenuIndex);
+      startEditMode(idx);
     }
   }
 
   function onGridKeyDown(ev) {
-    if (ev.key === "Escape") {
-      if (!els.cardContextMenu.hidden) {
-        hideContextMenu();
-        ev.preventDefault();
-        return;
-      }
-      if (editingIndex != null) {
-        exitEditMode();
-        ev.preventDefault();
-      }
+    if (ev.key === "Escape" && !els.cardContextMenu.hidden) {
+      hideContextMenu();
+      ev.preventDefault();
     }
   }
 
@@ -381,6 +325,9 @@
       if (!els.status.classList.contains("error")) {
         showDefaultStatus();
       }
+      if (SCG_Editor.isOpen()) {
+        SCG_I18N.applyToDocument();
+      }
     });
 
     els.levelAll.addEventListener("click", function () {
@@ -398,24 +345,9 @@
     els.cardWidth.addEventListener("change", saveSettings);
     els.cardHeight.addEventListener("change", saveSettings);
 
-    els.grid.addEventListener("input", onBodyEdit);
     els.grid.addEventListener("click", onGridClick);
     els.grid.addEventListener("contextmenu", onGridContextMenu);
     els.grid.addEventListener("keydown", onGridKeyDown);
-    els.grid.addEventListener("focusout", function (ev) {
-      if (editingIndex == null) {
-        return;
-      }
-      var body = ev.target.closest(".card-body");
-      if (!body || parseInt(body.dataset.index, 10) !== editingIndex) {
-        return;
-      }
-      var related = ev.relatedTarget;
-      if (related && body.contains(related)) {
-        return;
-      }
-      exitEditMode();
-    });
     els.cardContextMenu.addEventListener("click", onContextMenuAction);
     document.addEventListener("click", onDocumentClick);
 

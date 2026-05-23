@@ -30,6 +30,15 @@
       parseErrors: "Parse warnings",
       clearSelection: "Clear selection",
       editDescription: "Edit description",
+      saveDescription: "Save",
+      cancel: "Cancel",
+      descriptionHtml: "Description (HTML)",
+      preview: "Preview",
+      descriptionHelp:
+        "Allowed tags: br, strong/b, em/i, span, a, table, thead, tbody, tr, th, td\n" +
+        "Attributes: class=\"nameref\" on span; href=\"123\" on a (numeric spell index)\n" +
+        "Preview applies sanitization — scripts and other tags are stripped.\n" +
+        "Example: <br/><br/><table><tr><th>Col</th></tr><tr><td>…</td></tr></table>",
       selectionHint: "Click cards to choose what to print. Clear selection to print all visible cards.",
       selectCsvOnly: "Please select a .csv file.",
       classFilter: "Classes:",
@@ -71,6 +80,15 @@
       parseErrors: "Parse-Hinweise",
       clearSelection: "Auswahl aufheben",
       editDescription: "Beschreibung bearbeiten",
+      saveDescription: "Speichern",
+      cancel: "Abbrechen",
+      descriptionHtml: "Beschreibung (HTML)",
+      preview: "Vorschau",
+      descriptionHelp:
+        "Erlaubte Tags: br, strong/b, em/i, span, a, table, thead, tbody, tr, th, td\n" +
+        "Attribute: class=\"nameref\" auf span; href=\"123\" auf a (numerischer Zauberindex)\n" +
+        "Die Vorschau wendet Sanitisierung an — Skripte und andere Tags werden entfernt.\n" +
+        "Beispiel: <br/><br/><table><tr><th>Spalte</th></tr><tr><td>…</td></tr></table>",
       selectionHint: "Karten anklicken, um den Druck festzulegen. Auswahl aufheben, um alle sichtbaren Karten zu drucken.",
       selectCsvOnly: "Bitte eine .csv-Datei wählen.",
       classFilter: "Klassen:",

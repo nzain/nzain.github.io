@@ -58,6 +58,27 @@
 
   <main class="cards-grid" id="cards-grid"></main>
 
+  <section id="description-editor" class="description-editor" hidden>
+    <header class="description-editor-header">
+      <h2 id="desc-editor-title" class="description-editor-title"></h2>
+      <div class="description-editor-actions">
+        <button type="button" id="desc-editor-save" data-i18n="saveDescription">Save</button>
+        <button type="button" id="desc-editor-cancel" data-i18n="cancel">Cancel</button>
+      </div>
+    </header>
+    <div class="description-editor-body">
+      <div class="description-editor-source">
+        <label for="desc-editor-textarea" data-i18n="descriptionHtml">Description (HTML)</label>
+        <textarea id="desc-editor-textarea" spellcheck="true"></textarea>
+        <aside class="description-editor-help" data-i18n="descriptionHelp"></aside>
+      </div>
+      <div class="description-editor-preview">
+        <p class="description-editor-preview-label" data-i18n="preview">Preview</p>
+        <div id="desc-editor-preview-mount" class="description-editor-preview-mount"></div>
+      </div>
+    </div>
+  </section>
+
   <div id="card-context-menu" class="card-context-menu" role="menu" hidden>
     <button type="button" class="card-context-menu-item" data-context-action="edit" data-i18n="editDescription" role="menuitem">Edit description</button>
   </div>
@@ -71,6 +92,7 @@
   <script src="js/csv.js"></script>
   <script src="js/borders.js"></script>
   <script src="js/render.js"></script>
+  <script src="js/editor.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
