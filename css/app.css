@@ -555,7 +555,7 @@ body.is-editing-description #status {
 
 .description-editor {
   --editor-card-width: calc(var(--card-width-mm) * 1mm);
-  display: grid;
+  display: none;
   grid-template-columns:
     minmax(0, 1fr)
     calc((var(--editor-card-width) - 1rem) / 2)
@@ -566,6 +566,10 @@ body.is-editing-description #status {
   width: 100%;
   max-width: calc(var(--editor-card-width) * 4);
   margin: 0 auto;
+}
+
+body.is-editing-description .description-editor {
+  display: grid;
 }
 
 .description-editor-title {
