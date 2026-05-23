@@ -32,6 +32,14 @@
     };
   }
 
+  function fitTextareaHeight() {
+    if (!els.textarea) {
+      return;
+    }
+    els.textarea.style.height = "auto";
+    els.textarea.style.height = els.textarea.scrollHeight + "px";
+  }
+
   function updatePreview() {
     if (!isOpen() || !spellRef || !els.previewMount) {
       return;
@@ -68,6 +76,7 @@
     }
     if (els.textarea) {
       els.textarea.value = "";
+      els.textarea.style.height = "";
     }
     if (els.previewMount) {
       els.previewMount.innerHTML = "";
@@ -110,11 +119,13 @@
   }
 
   function onTextareaInput() {
+    fitTextareaHeight();
     schedulePreview();
   }
 
   function onResize() {
     if (isOpen()) {
+      fitTextareaHeight();
       updatePreview();
     }
   }
@@ -158,11 +169,12 @@
     onSaveCb = options.onSave || null;
     onCancelCb = options.onCancel || null;
 
-    els.title.textContent = String(spellRef.level) + " " + spellRef.name;
+    els.title.textContent = spellRef.name;
     els.textarea.value = spellRef.description != null ? String(spellRef.description) : "";
     els.panel.hidden = false;
     document.body.classList.add("is-editing-description");
 
+    fitTextareaHeight();
     updatePreview();
     els.textarea.focus();
   }
