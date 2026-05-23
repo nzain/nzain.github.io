@@ -7,6 +7,7 @@
   var hasClassTags = false;
   var selectedIndices = {};
   var contextMenuIndex = null;
+  var scrollRestoreIndex = null;
   var levelFilter;
   var classFilter;
 
@@ -130,12 +131,27 @@
     els.btnPrint.disabled = stats.printed === 0;
   }
 
+  function scrollSpellIntoView(idx) {
+    if (idx == null || !els.grid) {
+      return;
+    }
+    var pair = els.grid.querySelector('.card-pair[data-index="' + idx + '"]');
+    if (pair) {
+      pair.scrollIntoView({ block: "center" });
+    }
+  }
+
   function render() {
     var stats = SCG_Render.renderGrid(els.grid, spells, getRenderOptions());
     updatePrintButton(stats);
     updateSelectionUi();
     requestAnimationFrame(function () {
       SCG_Render.checkAllOverflow(els.grid);
+      if (scrollRestoreIndex != null) {
+        var restoreIdx = scrollRestoreIndex;
+        scrollRestoreIndex = null;
+        scrollSpellIntoView(restoreIdx);
+      }
     });
   }
 
@@ -189,9 +205,14 @@
       spell: spells[idx],
       onSave: function (index, description) {
         spells[index].description = description;
+        scrollRestoreIndex = index;
         render();
       },
-      onCancel: function () { /* discard draft */ },
+      onCancel: function () {
+        requestAnimationFrame(function () {
+          scrollSpellIntoView(idx);
+        });
+      },
     });
   }
 
