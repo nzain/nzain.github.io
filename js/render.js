@@ -1,6 +1,28 @@
 (function (global) {
   "use strict";
 
+  var ICON_BASE = "Externals/tw-dnd/icons";
+  var DND_LOGO_PATH = ICON_BASE + "/logo/dnd.svg";
+
+  var SCHOOL_TO_SLUG = {
+    abjuration: "abjuration",
+    abwehr: "abjuration",
+    bannzauber: "abjuration",
+    conjuration: "conjuration",
+    beschwoerung: "conjuration",
+    divination: "divination",
+    erkenntnis: "divination",
+    enchantment: "enchantment",
+    verzauberung: "enchantment",
+    evocation: "evocation",
+    hervorrufung: "evocation",
+    illusion: "illusion",
+    necromancy: "necromancy",
+    nekromantie: "necromancy",
+    transmutation: "transmutation",
+    verwandlung: "transmutation",
+  };
+
   var META_ICONS = {
     castingTime:
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" aria-hidden="true" focusable="false">' +
@@ -76,6 +98,76 @@
     var d = document.createElement("div");
     d.textContent = s;
     return d.innerHTML;
+  }
+
+  function normalizeSchoolKey(school) {
+    return String(school || "")
+      .trim()
+      .toLowerCase()
+      .replace(/ä/g, "ae")
+      .replace(/ö/g, "oe")
+      .replace(/ü/g, "ue")
+      .replace(/ß/g, "ss");
+  }
+
+  function schoolToIconSlug(school) {
+    if (!school) {
+      return null;
+    }
+    return SCHOOL_TO_SLUG[normalizeSchoolKey(school)] || null;
+  }
+
+  function mirrorColumnsForDuplex(spells, cols) {
+    var out = [];
+    for (var i = 0; i < spells.length; i += cols) {
+      var row = spells.slice(i, i + cols);
+      out.push.apply(out, row.reverse());
+    }
+    return out;
+  }
+
+  function buildCardBack(spell) {
+    var article = document.createElement("article");
+    article.className = "spell-card spell-card--back";
+
+    var back = document.createElement("div");
+    back.className = "card-back";
+
+    var frame = document.createElement("div");
+    frame.className = "card-back-frame";
+
+    var levelWrap = document.createElement("div");
+    levelWrap.className = "card-back-slot card-back-slot--level";
+    var levelEl = document.createElement("span");
+    levelEl.className = "card-back-level";
+    levelEl.textContent = String(spell.level);
+    levelWrap.appendChild(levelEl);
+    frame.appendChild(levelWrap);
+
+    var slug = schoolToIconSlug(spell.school);
+    var schoolWrap = document.createElement("div");
+    schoolWrap.className = "card-back-slot card-back-slot--school";
+    if (slug) {
+      var schoolImg = document.createElement("img");
+      schoolImg.src = ICON_BASE + "/spell/" + slug + ".svg";
+      schoolImg.alt = "";
+      schoolImg.setAttribute("aria-hidden", "true");
+      schoolWrap.appendChild(schoolImg);
+    }
+    frame.appendChild(schoolWrap);
+
+    var logoWrap = document.createElement("div");
+    logoWrap.className = "card-back-slot card-back-slot--logo";
+    var logoImg = document.createElement("img");
+    logoImg.src = DND_LOGO_PATH;
+    logoImg.alt = "";
+    logoImg.setAttribute("aria-hidden", "true");
+    logoWrap.appendChild(logoImg);
+    frame.appendChild(logoWrap);
+
+    back.appendChild(frame);
+    article.appendChild(back);
+    return article;
   }
 
   function buildCard(spell, index) {
@@ -163,6 +255,9 @@
   }
 
   function checkOverflow(card) {
+    if (card.classList.contains("spell-card--back")) {
+      return;
+    }
     var face = card.querySelector(".card-face");
     var guide = card.querySelector(".card-bounds-guide");
     if (!face || !guide) {
@@ -178,7 +273,7 @@
   }
 
   function checkAllOverflow(container) {
-    container.querySelectorAll(".spell-card").forEach(function (card) {
+    container.querySelectorAll(".spell-card:not(.spell-card--back)").forEach(function (card) {
       checkOverflow(card);
     });
   }
@@ -248,14 +343,24 @@
 
     var perPage =
       (options.cardsPerRow || 3) * (options.cardsPerCol || 3);
+    var cols = options.cardsPerRow || 3;
     for (var p = 0; p < filtered.length; p += perPage) {
-      var sheet = document.createElement("div");
-      sheet.className = "print-sheet";
-      for (var i = p; i < Math.min(p + perPage, filtered.length); i++) {
-        var idx = spells.indexOf(filtered[i]);
-        sheet.appendChild(buildCard(filtered[i], idx));
-      }
-      container.appendChild(sheet);
+      var pageSpells = filtered.slice(p, Math.min(p + perPage, filtered.length));
+
+      var frontSheet = document.createElement("div");
+      frontSheet.className = "print-sheet print-sheet--front";
+      pageSpells.forEach(function (spell) {
+        var idx = spells.indexOf(spell);
+        frontSheet.appendChild(buildCard(spell, idx));
+      });
+      container.appendChild(frontSheet);
+
+      var backSheet = document.createElement("div");
+      backSheet.className = "print-sheet print-sheet--back";
+      mirrorColumnsForDuplex(pageSpells, cols).forEach(function (spell) {
+        backSheet.appendChild(buildCardBack(spell));
+      });
+      container.appendChild(backSheet);
     }
 
     requestAnimationFrame(function () {
@@ -272,9 +377,11 @@
 
   global.SCG_Render = {
     buildCard: buildCard,
+    buildCardBack: buildCardBack,
     renderGrid: renderGrid,
     checkOverflow: checkOverflow,
     checkAllOverflow: checkAllOverflow,
     applyCardDimensions: applyCardDimensions,
+    schoolToIconSlug: schoolToIconSlug,
   };
 })(typeof window !== "undefined" ? window : this);
