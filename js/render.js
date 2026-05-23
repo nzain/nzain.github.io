@@ -314,8 +314,15 @@
 
   function renderGrid(container, spells, options) {
     options = options || {};
-    var levelMin = options.levelMin != null ? options.levelMin : 0;
-    var levelMax = options.levelMax != null ? options.levelMax : 9;
+    var selectedLevels = options.selectedLevels || null;
+    var allLevelCount =
+      options.allLevelCount != null
+        ? options.allLevelCount
+        : SCG_I18N.LEVEL_IDS.length;
+    var levelFilterActive =
+      selectedLevels &&
+      selectedLevels.length &&
+      selectedLevels.length < allLevelCount;
     var selectedClasses = options.classes || null;
     var allClassCount =
       options.allClassCount != null
@@ -340,7 +347,7 @@
     container.innerHTML = "";
 
     var visible = spells.filter(function (s) {
-      if (s.level < levelMin || s.level > levelMax) {
+      if (levelFilterActive && selectedLevels.indexOf(s.level) < 0) {
         return false;
       }
       if (classFilterActive && !spellMatchesClassFilter(s, selectedClasses, allClassCount)) {

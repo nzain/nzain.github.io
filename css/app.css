@@ -72,7 +72,7 @@ body {
 .toolbar button,
 .toolbar input:not([type="file"]):not([type="checkbox"]),
 .toolbar select,
-.class-chip {
+.filter-chip {
   box-sizing: border-box;
   height: var(--toolbar-control-h);
   font: inherit;
@@ -85,7 +85,7 @@ body {
 }
 
 .toolbar button,
-.class-chip {
+.filter-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -120,7 +120,7 @@ body {
 }
 
 .toolbar button:hover:not(:disabled),
-.class-chip:hover {
+.filter-chip:hover {
   background: #fff8e8;
 }
 
@@ -135,26 +135,28 @@ body {
   align-items: center;
 }
 
-.class-filter-row {
+.filter-row {
   align-items: flex-start;
   gap: 0.5rem 0.75rem;
 }
 
-.class-filter-label {
+.filter-label {
+  flex: 0 0 6.75rem;
+  width: 6.75rem;
   font-size: 0.85rem;
   font-weight: 600;
   line-height: var(--toolbar-control-h);
-  flex-shrink: 0;
+  text-align: right;
 }
 
-.class-filter-actions {
+.filter-actions {
   display: inline-flex;
   align-items: flex-start;
   gap: 0.25rem;
   flex-shrink: 0;
 }
 
-.class-filter-chips {
+.filter-chips {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -164,12 +166,12 @@ body {
   min-width: 12rem;
 }
 
-.class-chip {
+.filter-chip {
   gap: 0.35rem;
   border-radius: 999px;
 }
 
-.class-chip-input {
+.filter-chip-input {
   width: calc(var(--toolbar-control-h) - 0.65rem);
   height: calc(var(--toolbar-control-h) - 0.65rem);
   margin: 0;
@@ -177,7 +179,7 @@ body {
   flex-shrink: 0;
 }
 
-.class-chip:has(.class-chip-input:checked) {
+.filter-chip:has(.filter-chip-input:checked) {
   background: var(--accent);
   border-color: var(--accent);
   color: #fffef9;

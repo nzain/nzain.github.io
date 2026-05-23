@@ -5,6 +5,7 @@
   var activeFilename = "";
   var parseErrors = [];
   var selectedClasses = {};
+  var selectedLevels = {};
   var hasClassTags = false;
   var selectedIndices = {};
   var editingIndex = null;
@@ -92,6 +93,83 @@
     });
   }
 
+  function loadLevelFilterState() {
+    SCG_I18N.LEVEL_IDS.forEach(function (level) {
+      selectedLevels[String(level)] = true;
+    });
+    try {
+      var raw = localStorage.getItem("scg-level-filter");
+      if (!raw) {
+        return;
+      }
+      var saved = JSON.parse(raw);
+      if (!saved || typeof saved !== "object") {
+        return;
+      }
+      SCG_I18N.LEVEL_IDS.forEach(function (level) {
+        var key = String(level);
+        if (Object.prototype.hasOwnProperty.call(saved, key)) {
+          selectedLevels[key] = !!saved[key];
+        }
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveLevelFilterState() {
+    try {
+      localStorage.setItem("scg-level-filter", JSON.stringify(selectedLevels));
+    } catch (e) { /* ignore */ }
+  }
+
+  function getSelectedLevels() {
+    return SCG_I18N.LEVEL_IDS.filter(function (level) {
+      return selectedLevels[String(level)];
+    });
+  }
+
+  function syncLevelChipStates() {
+    if (!els.levelFilterChips) {
+      return;
+    }
+    els.levelFilterChips.querySelectorAll(".filter-chip-input").forEach(function (input) {
+      input.checked = !!selectedLevels[input.dataset.level];
+    });
+  }
+
+  function buildLevelFilterChips() {
+    els.levelFilterChips.innerHTML = "";
+    SCG_I18N.LEVEL_IDS.forEach(function (level) {
+      var key = String(level);
+      var label = document.createElement("label");
+      label.className = "filter-chip";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.className = "filter-chip-input";
+      input.dataset.level = key;
+      input.checked = !!selectedLevels[key];
+      var text = document.createElement("span");
+      text.className = "filter-chip-label";
+      text.textContent = SCG_I18N.levelChipLabel(level);
+      input.addEventListener("change", function () {
+        selectedLevels[key] = input.checked;
+        saveLevelFilterState();
+        render();
+      });
+      label.appendChild(input);
+      label.appendChild(text);
+      els.levelFilterChips.appendChild(label);
+    });
+  }
+
+  function setAllLevelSelection(on) {
+    SCG_I18N.LEVEL_IDS.forEach(function (level) {
+      selectedLevels[String(level)] = on;
+    });
+    saveLevelFilterState();
+    syncLevelChipStates();
+    render();
+  }
+
   function loadClassFilterState() {
     SCG_I18N.CLASS_IDS.forEach(function (id) {
       selectedClasses[id] = true;
@@ -129,7 +207,7 @@
     if (!els.classFilterChips) {
       return;
     }
-    els.classFilterChips.querySelectorAll(".class-chip-input").forEach(function (input) {
+    els.classFilterChips.querySelectorAll(".filter-chip-input").forEach(function (input) {
       input.checked = !!selectedClasses[input.dataset.classId];
     });
   }
@@ -138,14 +216,14 @@
     els.classFilterChips.innerHTML = "";
     SCG_I18N.CLASS_IDS.forEach(function (id) {
       var label = document.createElement("label");
-      label.className = "class-chip";
+      label.className = "filter-chip";
       var input = document.createElement("input");
       input.type = "checkbox";
-      input.className = "class-chip-input";
+      input.className = "filter-chip-input";
       input.dataset.classId = id;
       input.checked = !!selectedClasses[id];
       var text = document.createElement("span");
-      text.className = "class-chip-label";
+      text.className = "filter-chip-label";
       text.textContent = SCG_I18N.classLabel(id);
       input.addEventListener("change", function () {
         selectedClasses[id] = input.checked;
@@ -209,8 +287,8 @@
 
   function getRenderOptions() {
     return {
-      levelMin: parseInt(els.levelMin.value, 10) || 0,
-      levelMax: parseInt(els.levelMax.value, 10) || 9,
+      selectedLevels: getSelectedLevels(),
+      allLevelCount: SCG_I18N.LEVEL_IDS.length,
       classes: getSelectedClassIds(),
       allClassCount: SCG_I18N.CLASS_IDS.length,
       selectedIndices: selectedIndices,
@@ -471,6 +549,7 @@
 
     els.uiLang.addEventListener("change", function () {
       SCG_I18N.setLang(els.uiLang.value);
+      buildLevelFilterChips();
       buildClassFilterChips();
       render();
       if (!els.status.classList.contains("error")) {
@@ -478,8 +557,12 @@
       }
     });
 
-    els.levelMin.addEventListener("change", render);
-    els.levelMax.addEventListener("change", render);
+    els.levelAll.addEventListener("click", function () {
+      setAllLevelSelection(true);
+    });
+    els.levelNone.addEventListener("click", function () {
+      setAllLevelSelection(false);
+    });
     els.classAll.addEventListener("click", function () {
       setAllClassSelection(true);
     });
@@ -525,12 +608,13 @@
       btnExport: $("btn-export"),
       fileInput: $("file-input"),
       uiLang: $("ui-lang"),
-      levelMin: $("level-min"),
-      levelMax: $("level-max"),
       cardWidth: $("card-width"),
       cardHeight: $("card-height"),
       btnPrint: $("btn-print"),
       btnClearSelection: $("btn-clear-selection"),
+      levelFilterChips: $("level-filter-chips"),
+      levelAll: $("level-all"),
+      levelNone: $("level-none"),
       classFilterRow: $("class-filter-row"),
       classFilterChips: $("class-filter-chips"),
       classAll: $("class-all"),
@@ -544,7 +628,9 @@
     SCG_I18N.init();
     els.uiLang.value = SCG_I18N.getLang();
     loadSettings();
+    loadLevelFilterState();
     loadClassFilterState();
+    buildLevelFilterChips();
     buildClassFilterChips();
     bindEvents();
     showDefaultStatus();

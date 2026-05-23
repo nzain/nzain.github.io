@@ -30,23 +30,21 @@
         <input type="number" id="card-height" min="50" max="150">
       </label>
     </div>
-    <div class="toolbar-row">
-      <label class="toolbar-field">
-        <span data-i18n="levelFrom">Level from</span>
-        <input type="number" id="level-min" min="0" max="9" value="0">
-      </label>
-      <label class="toolbar-field">
-        <span data-i18n="levelTo">to</span>
-        <input type="number" id="level-max" min="0" max="9" value="9">
-      </label>
-    </div>
-    <div class="toolbar-row class-filter-row" id="class-filter-row" hidden>
-      <span class="class-filter-label" data-i18n="classFilter">Classes</span>
-      <div class="class-filter-actions">
-        <button type="button" id="class-all" data-i18n="classAll">All</button>
-        <button type="button" id="class-none" data-i18n="classNone">None</button>
+    <div class="toolbar-row filter-row" id="level-filter-row">
+      <span class="filter-label" data-i18n="levelFilter">Levels:</span>
+      <div class="filter-actions">
+        <button type="button" id="level-all" data-i18n="filterAll">All</button>
+        <button type="button" id="level-none" data-i18n="filterNone">None</button>
       </div>
-      <div class="class-filter-chips" id="class-filter-chips" role="group" data-i18n-aria="classFilter"></div>
+      <div class="filter-chips" id="level-filter-chips" role="group" data-i18n-aria="levelFilter"></div>
+    </div>
+    <div class="toolbar-row filter-row" id="class-filter-row" hidden>
+      <span class="filter-label" data-i18n="classFilter">Classes:</span>
+      <div class="filter-actions">
+        <button type="button" id="class-all" data-i18n="filterAll">All</button>
+        <button type="button" id="class-none" data-i18n="filterNone">None</button>
+      </div>
+      <div class="filter-chips" id="class-filter-chips" role="group" data-i18n-aria="classFilter"></div>
     </div>
   </header>
 

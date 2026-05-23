@@ -7,8 +7,9 @@
       openCsv: "Open CSV…",
       exportCsv: "Export CSV…",
       uiLanguage: "UI language",
-      levelFrom: "Level from",
-      levelTo: "to",
+      levelFilter: "Levels:",
+      filterAll: "All",
+      filterNone: "None",
       cardWidth: "Card width (mm)",
       cardHeight: "Card height (mm)",
       print: "Print",
@@ -31,9 +32,7 @@
       editDescription: "Edit description",
       selectionHint: "Click cards to choose what to print. Clear selection to print all visible cards.",
       selectCsvOnly: "Please select a .csv file.",
-      classFilter: "Classes",
-      classAll: "All",
-      classNone: "None",
+      classFilter: "Classes:",
       classBard: "Bard",
       classCleric: "Cleric",
       classDruid: "Druid",
@@ -49,8 +48,9 @@
       openCsv: "CSV öffnen…",
       exportCsv: "CSV exportieren…",
       uiLanguage: "Oberflächensprache",
-      levelFrom: "Grad von",
-      levelTo: "bis",
+      levelFilter: "Zaubergrad:",
+      filterAll: "Alle",
+      filterNone: "Keine",
       cardWidth: "Kartenbreite (mm)",
       cardHeight: "Kartenhöhe (mm)",
       print: "Drucken",
@@ -73,9 +73,7 @@
       editDescription: "Beschreibung bearbeiten",
       selectionHint: "Karten anklicken, um den Druck festzulegen. Auswahl aufheben, um alle sichtbaren Karten zu drucken.",
       selectCsvOnly: "Bitte eine .csv-Datei wählen.",
-      classFilter: "Klassen",
-      classAll: "Alle",
-      classNone: "Keine",
+      classFilter: "Klassen:",
       classBard: "Barde",
       classCleric: "Kleriker",
       classDruid: "Druide",
@@ -98,6 +96,8 @@
     "warlock",
     "wiz",
   ];
+
+  var LEVEL_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   var STORAGE_KEY = "scg-ui-lang";
   var currentLang = "en";
@@ -164,13 +164,19 @@
     return t("levelN", { n: n });
   }
 
+  function levelChipLabel(level) {
+    return formatLevel(level);
+  }
+
   global.SCG_I18N = {
     t: t,
     setLang: setLang,
     getLang: function () { return currentLang; },
     applyToDocument: applyToDocument,
     classLabel: classLabel,
+    levelChipLabel: levelChipLabel,
     CLASS_IDS: CLASS_IDS,
+    LEVEL_IDS: LEVEL_IDS,
     formatLevel: formatLevel,
     init: function () {
       setLang(getStoredLang());
