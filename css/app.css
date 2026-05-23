@@ -21,6 +21,7 @@
   --card-font-badge: 6pt;
   --card-line-height: 1.25;
   --card-back-border-mm: 4;
+  --card-back-edge-inset-mm: 5;
 }
 
 * {
@@ -509,6 +510,14 @@ body {
   justify-content: center;
   min-height: 0;
   padding: 0.35rem;
+}
+
+.card-back-slot--level {
+  padding-top: calc(var(--card-back-edge-inset-mm) * 1mm + 0.35rem);
+}
+
+.card-back-slot--logo {
+  padding-bottom: calc(var(--card-back-edge-inset-mm) * 1mm + 0.35rem);
 }
 
 .card-back-slot img {
