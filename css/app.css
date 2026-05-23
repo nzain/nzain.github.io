@@ -682,6 +682,7 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   position: relative;
   width: 100%;
   min-width: 0;
+  box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 4px;
   background: var(--card-bg);
@@ -692,19 +693,15 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   inset: 0;
   margin: 0;
   padding: 0.5rem 0.65rem;
-  overflow: auto;
-  scrollbar-width: none;
+  overflow: hidden;
   pointer-events: none;
   white-space: pre-wrap;
   word-wrap: break-word;
+  word-break: break-word;
   font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
   font-size: 13px;
   line-height: 1.4;
   color: var(--ink);
-}
-
-.description-editor-highlight::-webkit-scrollbar {
-  display: none;
 }
 
 .description-editor-highlight code {
@@ -720,19 +717,28 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   position: relative;
   z-index: 1;
   display: block;
+  box-sizing: border-box;
   width: 100%;
-  overflow: auto;
+  min-height: calc(var(--card-height-mm) * 1mm);
+  margin: 0;
   padding: 0.5rem 0.65rem;
-  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
-  font-size: 13px;
-  line-height: 1.4;
+  overflow: hidden;
   border: none;
   border-radius: 4px;
   background: transparent;
   color: transparent;
   caret-color: var(--ink);
+  -webkit-text-fill-color: transparent;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.4;
   resize: none;
-  field-sizing: content;
+  outline: none;
+}
+
+.description-editor-textarea:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .description-editor-preview-mount {

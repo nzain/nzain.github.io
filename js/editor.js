@@ -48,13 +48,29 @@
     els.highlight.scrollLeft = els.textarea.scrollLeft;
   }
 
-  function fitTextareaHeight() {
+  function getMinEditorHeight() {
+    if (els.previewMount) {
+      var card = els.previewMount.querySelector(".spell-card");
+      if (card && card.offsetHeight) {
+        return card.offsetHeight;
+      }
+    }
+    var mm =
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--card-height-mm")
+      ) || 90;
+    return mm * (96 / 25.4);
+  }
+
+  function fitEditorHeight() {
     if (!els.textarea) {
       return;
     }
     els.textarea.style.height = "auto";
-    els.textarea.style.height = els.textarea.scrollHeight + "px";
+    var minH = getMinEditorHeight();
+    els.textarea.style.height = Math.max(minH, els.textarea.scrollHeight) + "px";
     updateHighlight();
+    syncHighlightScroll();
   }
 
   function updatePreview() {
@@ -67,6 +83,7 @@
     var card = SCG_Render.buildCard(previewSpell, openIndex);
     els.previewMount.appendChild(card);
     SCG_Render.checkOverflow(card);
+    fitEditorHeight();
   }
 
   function schedulePreview() {
@@ -139,8 +156,7 @@
   }
 
   function onTextareaInput() {
-    fitTextareaHeight();
-    syncHighlightScroll();
+    fitEditorHeight();
     schedulePreview();
   }
 
@@ -150,7 +166,6 @@
 
   function onResize() {
     if (isOpen()) {
-      fitTextareaHeight();
       updatePreview();
     }
   }
@@ -203,7 +218,6 @@
     els.panel.hidden = false;
     document.body.classList.add("is-editing-description");
 
-    fitTextareaHeight();
     updatePreview();
     els.textarea.focus();
   }
