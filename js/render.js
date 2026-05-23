@@ -356,7 +356,7 @@
         ? SCG_I18N.t("noMatchFilter")
         : SCG_I18N.t("noSpells");
       container.appendChild(empty);
-      return { shown: 0, total: spells.length, selected: 0 };
+      return { printed: 0, total: spells.length };
     }
 
     var printable = selectionActive
@@ -364,8 +364,6 @@
           return selectedIndices[String(spells.indexOf(s))];
         })
       : visible.slice();
-
-    var selectedCount = selectionActive ? printable.length : 0;
 
     var perPage =
       (options.cardsPerRow || 3) * (options.cardsPerCol || 3);
@@ -417,7 +415,7 @@
       checkAllOverflow(container);
     });
 
-    return { shown: visible.length, total: spells.length, selected: selectedCount };
+    return { printed: printable.length, total: spells.length };
   }
 
   function applyCardDimensions(widthMm, heightMm) {

@@ -110,6 +110,13 @@ body {
 .file-actions button {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
+  white-space: nowrap;
+}
+
+#btn-print {
+  min-width: 13.5rem;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .toolbar button:hover:not(:disabled),
@@ -126,22 +133,6 @@ body {
   display: inline-flex;
   gap: 0.35rem;
   align-items: center;
-}
-
-.active-file {
-  font-size: 0.85rem;
-  color: #555;
-  font-style: italic;
-  max-width: 14rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.spell-count {
-  font-size: 0.85rem;
-  color: #555;
-  margin-left: auto;
 }
 
 .class-filter-row {
@@ -193,14 +184,60 @@ body {
 }
 
 .status {
-  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  min-height: 2.75rem;
   font-size: 0.9rem;
+  line-height: 1.35;
   background: #e8f4fc;
   border-bottom: 1px solid #9ecae6;
 }
 
+.status-content {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  max-width: 100%;
+}
+
+.status-message {
+  min-width: 0;
+}
+
+.status-action {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: 1.25rem;
+  min-width: 6.75rem;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0 0.35rem;
+  border: 1px solid #9ecae6;
+  border-radius: 3px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.status-action:hover {
+  background: #fff8e8;
+}
+
+.status-action:not(.is-visible) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .status.error {
   background: #fde8e8;
+  border-color: #f5a5a5;
+}
+
+.status.error .status-action {
   border-color: #f5a5a5;
 }
 

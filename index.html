@@ -18,12 +18,17 @@
       <div class="file-actions">
         <button type="button" id="btn-open" data-i18n="openCsv">Open CSV…</button>
         <button type="button" id="btn-export" disabled data-i18n="exportCsv">Export CSV…</button>
-        <button type="button" id="btn-clear-selection" hidden data-i18n="clearSelection">Clear selection</button>
-        <button type="button" id="btn-print" data-i18n="print">Print</button>
+        <button type="button" id="btn-print" disabled>Print</button>
         <input type="file" id="file-input" accept=".csv,text/csv" hidden>
       </div>
-      <span class="active-file" id="active-file" hidden></span>
-      <span class="spell-count" id="spell-count"></span>
+      <label class="toolbar-field">
+        <span data-i18n="cardWidth">Card width (mm)</span>
+        <input type="number" id="card-width" min="40" max="100">
+      </label>
+      <label class="toolbar-field">
+        <span data-i18n="cardHeight">Card height (mm)</span>
+        <input type="number" id="card-height" min="50" max="150">
+      </label>
     </div>
     <div class="toolbar-row">
       <label class="toolbar-field">
@@ -33,14 +38,6 @@
       <label class="toolbar-field">
         <span data-i18n="levelTo">to</span>
         <input type="number" id="level-max" min="0" max="9" value="9">
-      </label>
-      <label class="toolbar-field">
-        <span data-i18n="cardWidth">Card width (mm)</span>
-        <input type="number" id="card-width" min="40" max="100">
-      </label>
-      <label class="toolbar-field">
-        <span data-i18n="cardHeight">Card height (mm)</span>
-        <input type="number" id="card-height" min="50" max="150">
       </label>
     </div>
     <div class="toolbar-row class-filter-row" id="class-filter-row" hidden>
@@ -53,7 +50,12 @@
     </div>
   </header>
 
-  <aside class="status" id="status" role="status"></aside>
+  <aside class="status" id="status" role="status">
+    <div class="status-content">
+      <span class="status-message" id="status-message"></span>
+      <button type="button" id="btn-clear-selection" class="status-action" data-i18n="clearSelection">Clear selection</button>
+    </div>
+  </aside>
   <div class="log-panel" id="log-panel" hidden></div>
 
   <main class="cards-grid" id="cards-grid"></main>

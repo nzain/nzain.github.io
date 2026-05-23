@@ -17,8 +17,20 @@
   }
 
   function setStatus(msg, isError) {
-    els.status.textContent = msg;
+    if (els.statusMessage) {
+      els.statusMessage.textContent = msg;
+    }
     els.status.className = "status" + (isError ? " error" : "");
+  }
+
+  function showDefaultStatus() {
+    if (els.statusMessage) {
+      els.statusMessage.textContent = spells.length
+        ? SCG_I18N.t("selectionHint")
+        : SCG_I18N.t("openHint");
+    }
+    els.status.className = "status";
+    updateSelectionUi();
   }
 
   function setLog(errors) {
@@ -182,13 +194,16 @@
 
   function clearSelection() {
     selectedIndices = {};
-    updateSelectionUi();
+    showDefaultStatus();
     render();
   }
 
   function updateSelectionUi() {
     if (els.btnClearSelection) {
-      els.btnClearSelection.hidden = !isSelectionActive();
+      var visible = isSelectionActive();
+      els.btnClearSelection.classList.toggle("is-visible", visible);
+      els.btnClearSelection.setAttribute("aria-hidden", visible ? "false" : "true");
+      els.btnClearSelection.tabIndex = visible ? 0 : -1;
     }
   }
 
@@ -203,29 +218,12 @@
     };
   }
 
-  function updateSpellCount(stats) {
-    if (stats.selected > 0) {
-      els.spellCount.textContent = SCG_I18N.t("spellCountSelected", {
-        selected: stats.selected,
-        shown: stats.shown,
-        total: stats.total,
-      });
-    } else {
-      els.spellCount.textContent = SCG_I18N.t("spellCount", {
-        shown: stats.shown,
-        total: stats.total,
-      });
-    }
-  }
-
-  function updateActiveFileLabel() {
-    if (activeFilename) {
-      els.activeFile.textContent = activeFilename;
-      els.activeFile.hidden = false;
-    } else {
-      els.activeFile.textContent = "";
-      els.activeFile.hidden = true;
-    }
+  function updatePrintButton(stats) {
+    els.btnPrint.textContent = SCG_I18N.t("printCards", {
+      printed: stats.printed,
+      total: stats.total,
+    });
+    els.btnPrint.disabled = stats.printed === 0;
   }
 
   function focusEditingBody() {
@@ -253,7 +251,7 @@
 
   function render() {
     var stats = SCG_Render.renderGrid(els.grid, spells, getRenderOptions());
-    updateSpellCount(stats);
+    updatePrintButton(stats);
     updateSelectionUi();
     requestAnimationFrame(function () {
       SCG_Render.checkAllOverflow(els.grid);
@@ -274,8 +272,8 @@
       activeFilename = filename;
     }
     setLog(parseErrors);
-    updateActiveFileLabel();
     updateClassFilterVisibility();
+    showDefaultStatus();
     render();
     els.btnExport.disabled = !spells.length;
   }
@@ -298,7 +296,6 @@
       .then(function (text) {
         var parsed = SCG_CSV.parseCsvText(text);
         setSpells(parsed.spells, parsed.errors, file.name);
-        setStatus(SCG_I18N.t("loaded", { n: parsed.spells.length, file: file.name }));
       })
       .catch(function (err) {
         setStatus(String(err && err.message ? err.message : err), true);
@@ -390,11 +387,7 @@
     if (isNaN(idx)) {
       return;
     }
-    var wasActive = isSelectionActive();
     toggleSelection(idx);
-    if (!wasActive && isSelectionActive()) {
-      setStatus(SCG_I18N.t("selectionHint"));
-    }
     render();
   }
 
@@ -462,6 +455,9 @@
   }
 
   function onPrint() {
+    if (els.btnPrint.disabled) {
+      return;
+    }
     SCG_Render.checkAllOverflow(els.grid);
     window.print();
   }
@@ -477,7 +473,9 @@
       SCG_I18N.setLang(els.uiLang.value);
       buildClassFilterChips();
       render();
-      updateActiveFileLabel();
+      if (!els.status.classList.contains("error")) {
+        showDefaultStatus();
+      }
     });
 
     els.levelMin.addEventListener("change", render);
@@ -520,12 +518,12 @@
   function initEls() {
     els = {
       status: $("status"),
+      statusMessage: $("status-message"),
       logPanel: $("log-panel"),
       grid: $("cards-grid"),
       btnOpen: $("btn-open"),
       btnExport: $("btn-export"),
       fileInput: $("file-input"),
-      activeFile: $("active-file"),
       uiLang: $("ui-lang"),
       levelMin: $("level-min"),
       levelMax: $("level-max"),
@@ -533,7 +531,6 @@
       cardHeight: $("card-height"),
       btnPrint: $("btn-print"),
       btnClearSelection: $("btn-clear-selection"),
-      spellCount: $("spell-count"),
       classFilterRow: $("class-filter-row"),
       classFilterChips: $("class-filter-chips"),
       classAll: $("class-all"),
@@ -550,7 +547,7 @@
     loadClassFilterState();
     buildClassFilterChips();
     bindEvents();
-    setStatus(SCG_I18N.t("openHint"));
+    showDefaultStatus();
     render();
   }
 
