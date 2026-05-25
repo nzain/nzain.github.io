@@ -821,6 +821,7 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
 
 .spell-card--back {
   background: var(--card-bg);
+  border: none;
 }
 
 .card-back {
@@ -965,6 +966,10 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
     height: calc(var(--card-height-mm) * 1mm) !important;
     overflow: hidden;
     border: 1px solid #000;
+  }
+
+  .spell-card--back {
+    border: none;
   }
 
   .card-face {
