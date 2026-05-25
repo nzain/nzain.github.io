@@ -165,25 +165,24 @@
     var content = document.createElement("div");
     content.className = "card-back-content";
 
-    var levelWrap = document.createElement("div");
-    levelWrap.className = "card-back-slot card-back-slot--level";
+    var topWrap = document.createElement("div");
+    topWrap.className = "card-back-slot card-back-slot--top";
+
     var levelEl = document.createElement("span");
     levelEl.className = "card-back-level";
     levelEl.textContent = String(spell.level);
-    levelWrap.appendChild(levelEl);
-    content.appendChild(levelWrap);
+    topWrap.appendChild(levelEl);
 
     var slug = schoolToIconSlug(spell.school);
-    var schoolWrap = document.createElement("div");
-    schoolWrap.className = "card-back-slot card-back-slot--school";
     if (slug) {
       var schoolImg = document.createElement("img");
+      schoolImg.className = "card-back-school-icon";
       schoolImg.src = ICON_BASE + "/spell/" + slug + ".svg";
       schoolImg.alt = "";
       schoolImg.setAttribute("aria-hidden", "true");
-      schoolWrap.appendChild(schoolImg);
+      topWrap.appendChild(schoolImg);
     }
-    content.appendChild(schoolWrap);
+    content.appendChild(topWrap);
 
     var logoWrap = document.createElement("div");
     logoWrap.className = "card-back-slot card-back-slot--logo";
@@ -193,6 +192,11 @@
     logoImg.setAttribute("aria-hidden", "true");
     logoWrap.appendChild(logoImg);
     content.appendChild(logoWrap);
+
+    var classesWrap = document.createElement("div");
+    classesWrap.className = "card-back-slot card-back-slot--classes";
+    classesWrap.appendChild(buildCardBackClassGrid(spell));
+    content.appendChild(classesWrap);
 
     frame.appendChild(content);
 
@@ -351,6 +355,30 @@
       row.appendChild(img);
     });
     return row;
+  }
+
+  function buildCardBackClassGrid(spell) {
+    var tokens = parseSpellClasses(spell);
+    var active = {};
+    tokens.forEach(function (token) {
+      var slug = CLASS_TOKEN_TO_ICON[token.toLowerCase()];
+      if (slug) {
+        active[slug] = true;
+      }
+    });
+    var grid = document.createElement("div");
+    grid.className = "card-back-classes-grid";
+    CLASS_ICON_ORDER.forEach(function (slug) {
+      var img = document.createElement("img");
+      img.className =
+        "card-back-class-icon" +
+        (active[slug] ? "" : " card-back-class-icon--off");
+      img.src = ICON_BASE + "/class/" + slug + ".svg";
+      img.alt = "";
+      img.setAttribute("aria-hidden", "true");
+      grid.appendChild(img);
+    });
+    return grid;
   }
 
   function parseSpellClasses(spell) {

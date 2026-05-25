@@ -891,21 +891,42 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   padding: 0.35rem;
 }
 
-.card-back-slot--level {
+.card-back-slot--top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: center;
   padding-top: calc(var(--card-back-edge-inset-mm) * 1mm + 0.35rem);
 }
 
-.card-back-slot--logo {
-  padding-bottom: calc(var(--card-back-edge-inset-mm) * 1mm + 0.35rem);
+.card-back-slot--top .card-back-level {
+  margin-left: 5mm;
 }
 
-.card-back-slot img {
+.card-back-slot--top .card-back-school-icon {
+  margin-right: 5mm;
+}
+
+.card-back-slot--classes {
+  margin: 0 5mm 4mm 5mm;
+}
+
+.card-back-slot--logo img,
+.card-back-slot--top .card-back-school-icon {
   display: block;
-  max-width: 65%;
-  max-height: 65%;
   width: auto;
   height: auto;
   object-fit: contain;
+}
+
+.card-back-slot--logo img {
+  max-width: 65%;
+  max-height: 65%;
+}
+
+.card-back-slot--top .card-back-school-icon {
+  max-height: 80%;
+  max-width: 45%;
 }
 
 .card-back-level {
@@ -913,8 +934,31 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   line-height: 1;
   font-size: min(
     calc(var(--card-height-mm) * 1mm * 0.33 * 0.65),
-    calc(var(--card-width-mm) * 1mm * 0.65)
+    calc(var(--card-width-mm) * 1mm * 0.45)
   );
+}
+
+.card-back-classes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.25rem 0.4rem;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+}
+
+.card-back-class-icon {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.card-back-class-icon--off {
+  opacity: 0.2;
 }
 
 @media screen {
