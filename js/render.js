@@ -23,6 +23,28 @@
     verwandlung: "transmutation",
   };
 
+  var CLASS_ICON_ORDER = [
+    "bard",
+    "druid",
+    "cleric",
+    "paladin",
+    "ranger",
+    "wizard",
+    "sorcerer",
+    "warlock",
+  ];
+
+  var CLASS_TOKEN_TO_ICON = {
+    bard: "bard",
+    druid: "druid",
+    cleric: "cleric",
+    paladin: "paladin",
+    ranger: "ranger",
+    wiz: "wizard",
+    sorc: "sorcerer",
+    warlock: "warlock",
+  };
+
   var META_ICONS = {
     castingTime:
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" aria-hidden="true" focusable="false">' +
@@ -253,12 +275,7 @@
         schoolEl.textContent = spell.school;
         footer.appendChild(schoolEl);
       }
-      if (spell.classes) {
-        var classesEl = document.createElement("span");
-        classesEl.className = "card-footer-classes";
-        classesEl.textContent = spell.classes;
-        footer.appendChild(classesEl);
-      }
+      footer.appendChild(buildClassIconRow(spell));
     }
 
     face.appendChild(header);
@@ -310,6 +327,30 @@
     container.querySelectorAll(".spell-card:not(.spell-card--back)").forEach(function (card) {
       checkOverflow(card);
     });
+  }
+
+  function buildClassIconRow(spell) {
+    var tokens = parseSpellClasses(spell);
+    var active = {};
+    tokens.forEach(function (token) {
+      var slug = CLASS_TOKEN_TO_ICON[token.toLowerCase()];
+      if (slug) {
+        active[slug] = true;
+      }
+    });
+    var row = document.createElement("span");
+    row.className = "card-footer-classes";
+    CLASS_ICON_ORDER.forEach(function (slug) {
+      var img = document.createElement("img");
+      img.className =
+        "card-footer-class-icon" +
+        (active[slug] ? "" : " card-footer-class-icon--off");
+      img.src = ICON_BASE + "/class/" + slug + ".svg";
+      img.alt = "";
+      img.setAttribute("aria-hidden", "true");
+      row.appendChild(img);
+    });
+    return row;
   }
 
   function parseSpellClasses(spell) {
