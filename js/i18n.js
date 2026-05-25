@@ -5,6 +5,7 @@
     en: {
       appTitle: "Spell Card Generator",
       openCsv: "Open CSV…",
+      addSpell: "Add spell…",
       exportCsv: "Export CSV…",
       uiLanguage: "UI language",
       levelFilter: "Levels:",
@@ -59,6 +60,7 @@
     de: {
       appTitle: "Zauberkarten-Generator",
       openCsv: "CSV öffnen…",
+      addSpell: "Zauber anlegen…",
       exportCsv: "CSV exportieren…",
       uiLanguage: "Oberflächensprache",
       levelFilter: "Zaubergrad:",

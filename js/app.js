@@ -291,6 +291,49 @@
     });
   }
 
+  function makeBlankSpell() {
+    return {
+      level: 0,
+      name: "",
+      school: "",
+      castTime: "",
+      range: "",
+      components: "",
+      duration: "",
+      description: "",
+      classes: "",
+      ritual: false,
+    };
+  }
+
+  function startAddSpell() {
+    var newIdx = spells.length;
+    var draft = makeBlankSpell();
+    spells.push(draft);
+    SCG_Editor.open({
+      index: newIdx,
+      spell: draft,
+      schoolOptions: collectSchoolOptions(),
+      onSave: function (index, updatedSpell) {
+        spells[index] = updatedSpell;
+        scrollRestoreIndex = index;
+        hasClassTags = spellsHaveClassTags(spells);
+        updateClassFilterVisibility();
+        els.btnExport.disabled = !spells.length;
+        render();
+        persistSpells();
+      },
+      onCancel: function () {
+        spells.splice(newIdx, 1);
+        hasClassTags = spellsHaveClassTags(spells);
+        updateClassFilterVisibility();
+        els.btnExport.disabled = !spells.length;
+        render();
+        persistSpells();
+      },
+    });
+  }
+
   function hideContextMenu() {
     if (els.cardContextMenu) {
       els.cardContextMenu.hidden = true;
@@ -417,6 +460,7 @@
 
   function bindEvents() {
     els.btnOpen.addEventListener("click", onOpenClick);
+    els.btnAddSpell.addEventListener("click", startAddSpell);
     els.fileInput.addEventListener("change", onFileSelected);
     els.btnPrint.addEventListener("click", onPrint);
     els.btnExport.addEventListener("click", onExport);
@@ -468,6 +512,7 @@
       logPanel: $("log-panel"),
       grid: $("cards-grid"),
       btnOpen: $("btn-open"),
+      btnAddSpell: $("btn-add-spell"),
       btnExport: $("btn-export"),
       fileInput: $("file-input"),
       uiLang: $("ui-lang"),
