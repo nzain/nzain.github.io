@@ -1,6 +1,9 @@
 (function () {
   "use strict";
 
+  var STORAGE_KEY_SPELLS = "scg-spells-v1";
+  var STORAGE_KEY_FILENAME = "scg-spells-filename-v1";
+
   var spells = [];
   var activeFilename = "";
   var parseErrors = [];
@@ -68,6 +71,56 @@
       localStorage.setItem("scg-card-height", els.cardHeight.value);
     } catch (e) { /* ignore */ }
     applyDimensions();
+  }
+
+  function clearPersistedSpells() {
+    try {
+      localStorage.removeItem(STORAGE_KEY_SPELLS);
+      localStorage.removeItem(STORAGE_KEY_FILENAME);
+    } catch (e) { /* ignore */ }
+  }
+
+  function persistSpells() {
+    try {
+      if (!spells || !spells.length) {
+        clearPersistedSpells();
+        return;
+      }
+      var payload = JSON.stringify(spells);
+      localStorage.setItem(STORAGE_KEY_SPELLS, payload);
+      localStorage.setItem(STORAGE_KEY_FILENAME, activeFilename || "");
+    } catch (e) {
+      // Quota exceeded, storage unavailable, or serialization failure.
+      // Drop any stale entry so a refresh shows the empty state instead of
+      // restoring an out-of-date snapshot.
+      clearPersistedSpells();
+    }
+  }
+
+  function loadPersistedSpells() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY_SPELLS);
+      if (!raw) {
+        return null;
+      }
+      var data = JSON.parse(raw);
+      if (!Array.isArray(data) || !data.length) {
+        return null;
+      }
+      var allValid = data.every(function (s) {
+        return s && typeof s === "object" && typeof s.name === "string";
+      });
+      if (!allValid) {
+        return null;
+      }
+      var filename = "";
+      try {
+        filename = localStorage.getItem(STORAGE_KEY_FILENAME) || "";
+      } catch (e) { /* ignore */ }
+      return { spells: data, filename: filename };
+    } catch (e) {
+      return null;
+    }
   }
 
   function applyDimensions() {
@@ -170,6 +223,7 @@
     showDefaultStatus();
     render();
     els.btnExport.disabled = !spells.length;
+    persistSpells();
   }
 
   function onOpenClick() {
@@ -207,6 +261,7 @@
         spells[index].description = description;
         scrollRestoreIndex = index;
         render();
+        persistSpells();
       },
       onCancel: function () {
         requestAnimationFrame(function () {
@@ -422,8 +477,13 @@
     levelFilter.buildChips(els.levelFilterChips);
     classFilter.buildChips(els.classFilterChips);
     bindEvents();
-    showDefaultStatus();
-    render();
+    var restored = loadPersistedSpells();
+    if (restored) {
+      setSpells(restored.spells, [], restored.filename);
+    } else {
+      showDefaultStatus();
+      render();
+    }
   }
 
   if (document.readyState === "loading") {
