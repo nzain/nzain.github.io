@@ -544,14 +544,27 @@ body {
     display: none;
   }
 
+  .cards-preview .card-header {
+    position: relative;
+  }
+
   .cards-preview .card-header-actions {
     display: inline-flex;
+  }
+
+  .cards-preview .card-overflow-badge {
+    margin-right: 1.625rem;
   }
 
   .cards-preview .card-edit-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    transform: translateY(-50%);
+    z-index: 4;
     box-sizing: border-box;
     width: 1.375rem;
     height: 1.375rem;
