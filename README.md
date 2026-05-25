@@ -8,8 +8,10 @@ You can run this locally without any extra installs, just double click the index
 Semicolon-delimited (`;`), hardcodex-compatible column order:
 
 ```text
-Level; Name; Type; Cast Time; Range; Components; Duration; Description; [Classes]
+Level; Name; Type; Cast Time; Range; Components; Duration; Description; [Classes]; [Ritual]
 ```
+
+The optional `Ritual` column holds `R` for spells that may be cast as a ritual, otherwise empty. Missing values are treated as non-ritual. Ritual spells are tagged with a small `(Ritual)` next to the school in the card footer.
 
 Descriptions may include limited HTML (`<br>`, `<strong>`, `<b>`, `<span class=nameref>`, `<a href=123>`, tables). Content is sanitized before display.
 

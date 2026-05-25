@@ -279,6 +279,12 @@
         schoolEl.textContent = spell.school;
         footer.appendChild(schoolEl);
       }
+      if (spell.ritual) {
+        var ritualEl = document.createElement("span");
+        ritualEl.className = "card-footer-ritual";
+        ritualEl.textContent = " (" + SCG_I18N.t("ritual") + ")";
+        footer.appendChild(ritualEl);
+      }
       footer.appendChild(buildClassIconRow(spell));
     }
 
