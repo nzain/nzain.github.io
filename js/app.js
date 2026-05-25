@@ -250,6 +250,23 @@
       });
   }
 
+  function collectSchoolOptions() {
+    var seen = {};
+    var out = [];
+    spells.forEach(function (s) {
+      var school = s && s.school != null ? String(s.school).trim() : "";
+      if (!school || seen[school]) {
+        return;
+      }
+      seen[school] = true;
+      out.push(school);
+    });
+    out.sort(function (a, b) {
+      return a.localeCompare(b);
+    });
+    return out;
+  }
+
   function startEditMode(idx) {
     if (!spells[idx]) {
       return;
@@ -257,9 +274,12 @@
     SCG_Editor.open({
       index: idx,
       spell: spells[idx],
-      onSave: function (index, description) {
-        spells[index].description = description;
+      schoolOptions: collectSchoolOptions(),
+      onSave: function (index, updatedSpell) {
+        spells[index] = updatedSpell;
         scrollRestoreIndex = index;
+        hasClassTags = spellsHaveClassTags(spells);
+        updateClassFilterVisibility();
         render();
         persistSpells();
       },

@@ -30,11 +30,14 @@
       exported: "Exported {file}",
       parseErrors: "Parse warnings",
       clearSelection: "Clear selection",
-      editDescription: "Edit description",
+      editDescription: "Edit spell",
       saveDescription: "Save",
       cancel: "Cancel",
       descriptionHtml: "Description (HTML)",
       preview: "Preview",
+      levelLabel: "Level",
+      nameLabel: "Name",
+      componentsInvalid: "Use V/G/M (or V/S/M), comma separated, optionally followed by (material).",
       descriptionHelp:
         "Allowed tags: br, strong/b, em/i, span, a, table, thead, tbody, tr, th, td\n" +
         "Attributes: class=\"nameref\" on span; href=\"123\" on a (numeric spell index)\n" +
@@ -81,11 +84,14 @@
       exported: "{file} exportiert",
       parseErrors: "Parse-Hinweise",
       clearSelection: "Auswahl aufheben",
-      editDescription: "Beschreibung bearbeiten",
+      editDescription: "Zauber bearbeiten",
       saveDescription: "Speichern",
       cancel: "Abbrechen",
       descriptionHtml: "Beschreibung (HTML)",
       preview: "Vorschau",
+      levelLabel: "Grad",
+      nameLabel: "Name",
+      componentsInvalid: "V/G/M (oder V/S/M), durch Komma getrennt, optional gefolgt von (Material).",
       descriptionHelp:
         "Erlaubte Tags: br, strong/b, em/i, span, a, table, thead, tbody, tr, th, td\n" +
         "Attribute: class=\"nameref\" auf span; href=\"123\" auf a (numerischer Zauberindex)\n" +

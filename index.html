@@ -59,16 +59,76 @@
   <main class="cards-grid" id="cards-grid"></main>
 
   <section id="description-editor" class="description-editor" hidden>
-    <h2 id="desc-editor-title" class="description-editor-title"></h2>
-    <button type="button" id="desc-editor-save" class="description-editor-save" data-i18n="saveDescription">Save</button>
-    <button type="button" id="desc-editor-cancel" class="description-editor-cancel" data-i18n="cancel">Cancel</button>
-    <div class="description-editor-code-wrap">
-      <pre class="description-editor-highlight" aria-hidden="true"><code id="desc-editor-highlight"></code></pre>
-      <textarea id="desc-editor-textarea" class="description-editor-textarea" spellcheck="false"
-        aria-labelledby="desc-editor-title"></textarea>
+    <div class="editor-form">
+      <div class="editor-row editor-row--name">
+        <label class="editor-field editor-field--level">
+          <span class="editor-field-label" data-i18n="levelLabel">Level</span>
+          <select id="editor-level"></select>
+        </label>
+        <label class="editor-field editor-field--name">
+          <span class="editor-field-label" data-i18n="nameLabel">Name</span>
+          <input type="text" id="editor-name" autocomplete="off" spellcheck="false">
+        </label>
+        <div class="editor-field editor-field--actions">
+          <button type="button" id="desc-editor-save" class="description-editor-save" data-i18n="saveDescription">Save</button>
+          <button type="button" id="desc-editor-cancel" class="description-editor-cancel" data-i18n="cancel">Cancel</button>
+        </div>
+      </div>
+
+      <div class="editor-row editor-row--meta">
+        <label class="editor-field editor-field--fixed">
+          <span class="editor-field-label" data-i18n="castingTime">Cast</span>
+          <input type="text" id="editor-cast-time" list="editor-casttime-presets" autocomplete="off" spellcheck="false">
+          <datalist id="editor-casttime-presets">
+            <option value="Aktion"></option>
+            <option value="Reaktion"></option>
+            <option value="Bonusaktion"></option>
+          </datalist>
+        </label>
+        <label class="editor-field editor-field--fixed">
+          <span class="editor-field-label" data-i18n="range">Range</span>
+          <input type="text" id="editor-range" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <div class="editor-row editor-row--meta">
+        <label class="editor-field editor-field--fixed">
+          <span class="editor-field-label" data-i18n="duration">Duration</span>
+          <input type="text" id="editor-duration" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="editor-field editor-field--fixed">
+          <span class="editor-field-label" data-i18n="components">Comp.</span>
+          <input type="text" id="editor-components" autocomplete="off" spellcheck="false" aria-describedby="editor-components-error">
+          <span class="editor-field-error" id="editor-components-error" hidden></span>
+        </label>
+      </div>
+
+      <div class="editor-row editor-row--description">
+        <div class="description-editor-code-wrap">
+          <pre class="description-editor-highlight" aria-hidden="true"><code id="desc-editor-highlight"></code></pre>
+          <textarea id="desc-editor-textarea" class="description-editor-textarea" spellcheck="false"
+            data-i18n-aria="descriptionHtml" aria-label="Description (HTML)"></textarea>
+        </div>
+        <div id="desc-editor-preview-mount" class="description-editor-preview-mount"></div>
+        <aside class="description-editor-help" data-i18n="descriptionHelp"></aside>
+      </div>
+
+      <div class="editor-row editor-row--school">
+        <label class="editor-field editor-field--fixed">
+          <span class="editor-field-label" data-i18n="school">School</span>
+          <select id="editor-school"></select>
+        </label>
+        <label class="editor-field editor-field--ritual">
+          <input type="checkbox" id="editor-ritual">
+          <span class="editor-field-label" data-i18n="ritual">Ritual</span>
+        </label>
+      </div>
+
+      <div class="editor-row editor-row--classes">
+        <span class="editor-field-label" data-i18n="classes">Classes</span>
+        <div class="filter-chips" id="editor-class-chips" role="group" data-i18n-aria="classes"></div>
+      </div>
     </div>
-    <div id="desc-editor-preview-mount" class="description-editor-preview-mount"></div>
-    <aside class="description-editor-help" data-i18n="descriptionHelp"></aside>
   </section>
 
   <div id="card-context-menu" class="card-context-menu" role="menu" hidden>
