@@ -21,6 +21,9 @@
   --card-line-height: 1.25;
   --card-back-border-mm: 4;
   --card-back-edge-inset-mm: 5;
+  /* Horizontal grid gap in preview: room for edit + overflow badges outside the card edge */
+  --card-preview-column-gap: 3rem;
+  --card-chrome-gap: 1mm;
 }
 
 * {
@@ -339,14 +342,12 @@ body {
   word-break: break-word;
 }
 
-.card-header-actions {
-  display: none;
-  align-items: center;
-  gap: 0.15rem;
-  flex-shrink: 0;
-}
-
 .card-overflow-badge {
+  display: none;
+  position: absolute;
+  top: calc(var(--card-height-mm) * 1mm);
+  right: 0;
+  transform: translate(calc(100% + var(--card-chrome-gap)), -100%);
   font-size: var(--card-font-badge);
   font-weight: 600;
   line-height: 1.2;
@@ -355,10 +356,21 @@ body {
   padding: 1px 4px;
   border-radius: 2px;
   white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.card-overflow-badge:not([hidden]) {
+  display: block;
 }
 
 .card-edit-btn {
   display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(calc(100% + var(--card-chrome-gap)));
+  z-index: 5;
 }
 
 .card-meta {
@@ -528,12 +540,13 @@ body {
 .cards-preview {
   display: grid;
   grid-template-columns: repeat(var(--cards-per-row), calc(var(--card-width-mm) * 1mm));
-  gap: 1.5rem;
+  column-gap: var(--card-preview-column-gap);
+  row-gap: 1.5rem;
   justify-content: center;
   width: 100%;
   max-width: calc(
     var(--card-width-mm) * var(--cards-per-row) * 1mm +
-    (var(--cards-per-row) - 1) * 1.5rem +
+    (var(--cards-per-row) - 1) * var(--card-preview-column-gap) +
     2rem
   );
 }
@@ -543,6 +556,11 @@ body {
   flex-direction: column;
   gap: 0.4rem;
   width: calc(var(--card-width-mm) * 1mm);
+  overflow: visible;
+}
+
+.cards-preview .spell-card {
+  overflow: visible;
 }
 
 .card-pair .spell-card--back {
@@ -563,27 +581,10 @@ body {
     display: none;
   }
 
-  .cards-preview .card-header {
-    position: relative;
-  }
-
-  .cards-preview .card-header-actions {
-    display: inline-flex;
-  }
-
-  .cards-preview .card-overflow-badge {
-    margin-right: 1.625rem;
-  }
-
   .cards-preview .card-edit-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 50%;
-    right: 0.25rem;
-    transform: translateY(-50%);
-    z-index: 4;
     box-sizing: border-box;
     width: 1.375rem;
     height: 1.375rem;
@@ -660,10 +661,6 @@ body.is-editing-description #status {
 
 body.is-editing-description .description-editor {
   display: flex;
-}
-
-body.is-editing-description .description-editor-preview-mount .card-header-actions {
-  display: inline-flex;
 }
 
 body.is-editing-description .description-editor-preview-mount .card-edit-btn {
@@ -1146,7 +1143,9 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   }
 
   .card-bounds-guide,
-  .spell-card.overflow-warning::after {
+  .spell-card.overflow-warning::after,
+  .card-overflow-badge,
+  .card-edit-btn {
     display: none;
   }
 
