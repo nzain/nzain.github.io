@@ -197,6 +197,21 @@
     };
   }
 
+  function getFilterOptions() {
+    return {
+      selectedLevels: levelFilter.getSelected(),
+      allLevelCount: SCG_I18N.LEVEL_IDS.length,
+      classes: classFilter.getSelected(),
+      allClassCount: SCG_I18N.CLASS_IDS.length,
+    };
+  }
+
+  function updateSpellDependentButtons() {
+    var hasSpells = spells.length > 0;
+    els.btnExport.disabled = !hasSpells;
+    els.btnOverview.disabled = !hasSpells;
+  }
+
   function updatePrintButton(stats) {
     els.btnPrint.textContent = SCG_I18N.t("printCards", {
       printed: stats.printed,
@@ -244,8 +259,23 @@
     updateClassFilterVisibility();
     showDefaultStatus();
     render();
-    els.btnExport.disabled = !spells.length;
+    updateSpellDependentButtons();
     persistSpells();
+  }
+
+  function openOverview() {
+    if (!spells.length || !els.overviewDialog) {
+      return;
+    }
+    var visible = SCG_Render.getVisibleSpells(spells, getFilterOptions());
+    SCG_Render.renderOverview(els.overviewBody, visible, spells.length);
+    els.overviewDialog.showModal();
+  }
+
+  function closeOverview() {
+    if (els.overviewDialog && els.overviewDialog.open) {
+      els.overviewDialog.close();
+    }
   }
 
   function onOpenClick() {
@@ -344,7 +374,7 @@
         scrollRestoreIndex = spells.indexOf(updatedSpell);
         hasClassTags = spellsHaveClassTags(spells);
         updateClassFilterVisibility();
-        els.btnExport.disabled = !spells.length;
+        updateSpellDependentButtons();
         render();
         persistSpells();
       },
@@ -352,7 +382,7 @@
         spells.splice(newIdx, 1);
         hasClassTags = spellsHaveClassTags(spells);
         updateClassFilterVisibility();
-        els.btnExport.disabled = !spells.length;
+        updateSpellDependentButtons();
         render();
         persistSpells();
       },
@@ -497,6 +527,7 @@
     els.fileInput.addEventListener("change", onFileSelected);
     els.btnPrint.addEventListener("click", onPrint);
     els.btnExport.addEventListener("click", onExport);
+    els.btnOverview.addEventListener("click", openOverview);
     els.btnClearSelection.addEventListener("click", clearSelection);
 
     els.levelAll.addEventListener("click", function () {
@@ -521,6 +552,10 @@
     els.cardContextMenu.addEventListener("click", onContextMenuAction);
     document.addEventListener("click", onDocumentClick);
 
+    if (els.overviewClose) {
+      els.overviewClose.addEventListener("click", closeOverview);
+    }
+
     window.addEventListener("resize", function () {
       SCG_Render.checkAllOverflow(els.grid);
     });
@@ -535,6 +570,7 @@
       btnOpen: $("btn-open"),
       btnAddSpell: $("btn-add-spell"),
       btnExport: $("btn-export"),
+      btnOverview: $("btn-overview"),
       fileInput: $("file-input"),
       cardWidth: $("card-width"),
       cardHeight: $("card-height"),
@@ -549,6 +585,9 @@
       classAll: $("class-all"),
       classNone: $("class-none"),
       cardContextMenu: $("card-context-menu"),
+      overviewDialog: $("spell-overview"),
+      overviewBody: $("spell-overview-body"),
+      overviewClose: $("spell-overview-close"),
     };
   }
 

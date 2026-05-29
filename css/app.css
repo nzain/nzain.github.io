@@ -1092,6 +1092,105 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
   max-width: calc(var(--card-width-mm) * var(--cards-per-row) * 1mm + 2rem);
 }
 
+.spell-overview {
+  width: min(32rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  background: #fff;
+  color: var(--ink);
+}
+
+.spell-overview::backdrop {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.spell-overview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--toolbar-bg);
+}
+
+.spell-overview-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.spell-overview-close {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 1.625rem;
+  height: 1.625rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: #fff;
+  font: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.spell-overview-close:hover,
+.spell-overview-close:focus {
+  background: #fff8e8;
+  outline: none;
+}
+
+.spell-overview-body {
+  padding: 0.75rem 1rem 1rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 6rem);
+}
+
+.spell-overview-empty {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.spell-overview-level + .spell-overview-level {
+  margin-top: 1rem;
+}
+
+.spell-overview-level-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.spell-overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.spell-overview-cell {
+  padding: 0.1rem 0.5rem 0.1rem 0;
+  vertical-align: top;
+  word-break: break-word;
+  border: none;
+}
+
+.spell-overview-cell--de {
+  padding-left: 0.5rem;
+  border-left: 1px solid var(--border);
+}
+
+.spell-overview-cell--missing-en {
+  color: #888;
+}
+
 @media print {
   @page {
     size: A4 portrait;
@@ -1104,7 +1203,8 @@ body.is-editing-description .description-editor-preview-mount .spell-card.overfl
 
   .toolbar,
   .status,
-  .log-panel {
+  .log-panel,
+  .spell-overview {
     display: none !important;
   }
 

@@ -15,6 +15,7 @@
         <button type="button" id="btn-open" data-i18n="openCsv">Open CSV…</button>
         <button type="button" id="btn-add-spell" data-i18n="addSpell">Add spell…</button>
         <button type="button" id="btn-export" disabled data-i18n="exportCsv">Export CSV…</button>
+        <button type="button" id="btn-overview" disabled data-i18n="overview">Overview…</button>
         <button type="button" id="btn-print" disabled>Print</button>
         <input type="file" id="file-input" accept=".csv,text/csv" hidden>
       </div>
@@ -137,6 +138,14 @@
       </div>
     </div>
   </section>
+
+  <dialog id="spell-overview" class="spell-overview">
+    <div class="spell-overview-header">
+      <h2 class="spell-overview-title" data-i18n="overviewTitle">Spell overview</h2>
+      <button type="button" id="spell-overview-close" class="spell-overview-close" data-i18n-aria="overviewClose">×</button>
+    </div>
+    <div id="spell-overview-body" class="spell-overview-body"></div>
+  </dialog>
 
   <div id="card-context-menu" class="card-context-menu" role="menu" hidden>
     <button type="button" class="card-context-menu-item" data-context-action="edit" data-i18n="editDescription" role="menuitem">Edit description</button>

@@ -422,7 +422,7 @@
     });
   }
 
-  function renderGrid(container, spells, options) {
+  function getVisibleSpells(spells, options) {
     options = options || {};
     var selectedLevels = options.selectedLevels || null;
     var allLevelCount =
@@ -442,11 +442,8 @@
       selectedClasses &&
       selectedClasses.length &&
       selectedClasses.length < allClassCount;
-    var selectedIndices = options.selectedIndices || null;
-    var selectionActive = !!options.selectionActive;
-    container.innerHTML = "";
 
-    var visible = spells.filter(function (s) {
+    return spells.filter(function (s) {
       if (levelFilterActive && selectedLevels.indexOf(s.level) < 0) {
         return false;
       }
@@ -455,6 +452,79 @@
       }
       return true;
     });
+  }
+
+  function renderOverview(container, visibleSpells, totalSpellCount) {
+    container.innerHTML = "";
+    if (!visibleSpells.length) {
+      var empty = document.createElement("p");
+      empty.className = "spell-overview-empty";
+      empty.textContent = totalSpellCount
+        ? SCG_I18N.t("noMatchFilter")
+        : SCG_I18N.t("noSpells");
+      container.appendChild(empty);
+      return;
+    }
+
+    var byLevel = {};
+    visibleSpells.forEach(function (spell) {
+      var level = spell.level != null ? spell.level : 0;
+      if (!byLevel[level]) {
+        byLevel[level] = [];
+      }
+      byLevel[level].push(spell);
+    });
+
+    SCG_I18N.LEVEL_IDS.forEach(function (level) {
+      var group = byLevel[level];
+      if (!group || !group.length) {
+        return;
+      }
+      var section = document.createElement("section");
+      section.className = "spell-overview-level";
+
+      var heading = document.createElement("h3");
+      heading.className = "spell-overview-level-title";
+      heading.textContent =
+        SCG_I18N.formatLevel(level) + " (" + group.length + ")";
+      section.appendChild(heading);
+
+      var table = document.createElement("table");
+      table.className = "spell-overview-table";
+      var tbody = document.createElement("tbody");
+      group.forEach(function (spell) {
+        var row = document.createElement("tr");
+
+        var cellEn = document.createElement("td");
+        cellEn.className = "spell-overview-cell spell-overview-cell--en";
+        var nameEn = spell.nameEn != null ? String(spell.nameEn).trim() : "";
+        if (!nameEn) {
+          cellEn.classList.add("spell-overview-cell--missing-en");
+          nameEn = "—";
+        }
+        cellEn.textContent = nameEn;
+
+        var cellDe = document.createElement("td");
+        cellDe.className = "spell-overview-cell spell-overview-cell--de";
+        cellDe.textContent = spell.name != null ? String(spell.name) : "";
+
+        row.appendChild(cellEn);
+        row.appendChild(cellDe);
+        tbody.appendChild(row);
+      });
+      table.appendChild(tbody);
+      section.appendChild(table);
+      container.appendChild(section);
+    });
+  }
+
+  function renderGrid(container, spells, options) {
+    options = options || {};
+    var selectedIndices = options.selectedIndices || null;
+    var selectionActive = !!options.selectionActive;
+    container.innerHTML = "";
+
+    var visible = getVisibleSpells(spells, options);
 
     if (!visible.length) {
       var empty = document.createElement("p");
@@ -538,6 +608,8 @@
     buildCard: buildCard,
     buildCardEnglishName: buildCardEnglishName,
     buildCardBack: buildCardBack,
+    getVisibleSpells: getVisibleSpells,
+    renderOverview: renderOverview,
     renderGrid: renderGrid,
     checkOverflow: checkOverflow,
     checkAllOverflow: checkAllOverflow,
