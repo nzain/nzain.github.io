@@ -1,4 +1,4 @@
-# Pats Zauberkarten-Generator — https://nzain.github.io/
+# Pats Zauberkarten-Generator — [https://nzain.github.io/](https://nzain.github.io/)
 
 Öffne eine CSV-Datei, sieh die Karten in der Vorschau, bearbeite Beschreibungen im Browser und drucke ein 3×3-Raster auf A4. Läuft in jedem modernen Browser unter Windows — ohne Python oder Node.
 Lokal starten geht ohne Installation: `index.html` doppelklicken.
@@ -13,7 +13,7 @@ Level; Name; Type; Cast Time; Range; Components; Duration; Description; [Classes
 
 Die optionale Spalte `Ritual` enthält `R`, wenn der Zauber als Ritual gewirkt werden kann, sonst leer. Fehlende Werte gelten als kein Ritual. Ritualzauber werden in der Kartenfußzeile neben der Schule mit `(Ritual)` markiert.
 
-Die optionale Spalte `Name (EN)` enthält den englischen PHB-Zaubernamen zum manuellen Abgleich mit den deutschen Namen. Sie erscheint nicht auf den Karten und ist in der Oberfläche nicht editierbar; beim Export ist die Spalte immer dabei (leer, wenn nicht gesetzt).
+Die optionale Spalte `Name (EN)` enthält den englischen Zaubernamen zum manuellen Abgleich mit den deutschen Namen. Sie erscheint nicht auf den Karten und ist in der Oberfläche nicht editierbar; beim Export ist die Spalte immer dabei (leer, wenn nicht gesetzt).
 
 Beschreibungen dürfen eingeschränktes HTML enthalten (`<br>`, `<strong>`, `<b>`, `<span class=nameref>`, `<a href=123>`, Tabellen). Vor der Anzeige wird der Inhalt bereinigt.
 
