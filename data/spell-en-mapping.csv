@@ -1,0 +1,362 @@
+level;name_de;name_en
+0;Säurespritzer;Acid Splash
+0;Klingenbann;Blade Ward
+0;Kalte Hand;Chill Touch
+0;Tanzende Lichter;Dancing Lights
+0;Druidenkunst;Druidcraft
+0;Unheimlicher Strahl;Eldritch Blast
+0;Feuerpfeil;Fire Bolt
+0;Freundschaft;Friends
+0;Göttliche Führung;Guidance
+0;Licht;Light
+0;Magierhand;Mage Hand
+0;Ausbessern;Mending
+0;Botschaft;Message
+0;Einfache Illusion;Minor Illusion
+0;Gift versprühen;Poison Spray
+0;Taschenspielerei;Prestidigitation
+0;Flammen erzeugen;Produce Flame
+0;Kältestrahl;Ray of Frost
+0;Resistenz;Resistance
+0;Heilige Flamme;Sacred Flame
+0;Shillelagh;Shillelagh
+0;Schockgriff;Shocking Grasp
+0;Verschonung der Sterbenden;Spare the Dying
+0;Thaumaturgie;Thaumaturgy
+0;Dornenpeitsche;Thorn Whip
+0;Zielsicherer Schlag;True Strike
+0;Gehässiger Spott;Vicious Mockery
+1;Alarm;Alarm
+1;Tierfreundschaft;Animal Friendship
+1;Rüstung von Agathys;Armor of Agathys
+1;Arme von Hadar;Arms of Hadar
+1;Verderben;Bane
+1;Segnen;Bless
+1;Brennende Hände;Burning Hands
+1;Person bezaubern;Charm Person
+1;Chromatische Kugel;Chromatic Orb
+1;Sprühende Farben;Color Spray
+1;Befehl;Command
+1;Erzwungenes Duell;Compelled Duel
+1;Sprachen verstehen;Comprehend Languages
+1;Wasser erschaffen oder zerstören;Create or Destroy Water
+1;Wunden heilen;Cure Wounds
+1;Gutes und Böses entdecken;Detect Evil and Good
+1;Magie entdecken;Detect Magic
+1;Gift und Krankheit entdecken;Detect Poison and Disease
+1;Selbstverkleidung;Disguise Self
+1;Dissonantes Flüstern;Dissonant Whispers
+1;Göttliche Gunst;Divine Favor
+1;Fesselnder Schlag;Ensnaring Strike
+1;Verstricken;Entangle
+1;Rascher Rückzug;Expeditious Retreat
+1;Feenfeuer;Faerie Fire
+1;Falsches Leben;False Life
+1;Federfall;Feather Fall
+1;Vertrauten finden;Find Familiar
+1;Nebelwolke;Fog Cloud
+1;Gute Beeren;Goodberry
+1;Schmieren;Grease
+1;Lenkendes Geschoss;Guiding Bolt
+1;Dornenhagel;Hail of Thorns
+1;Heilendes Wort;Healing Word
+1;Höllischer Tadel;Hellish Rebuke
+1;Heldenmut;Heroism
+1;Verwünschen;Hex
+1;Zeichen des Jägers;Hunter's Mark
+1;Identifizieren;Identify
+1;Illusionsschrift;Illusory Script
+1;Wunden verursachen;Inflict Wounds
+1;Springen;Jump
+1;Lange Schritte;Longstrider
+1;Magierrüstung;Mage Armor
+1;Magisches Geschoss;Magic Missile
+1;Schutz vor Gut und Böse;Protection from Evil and Good
+1;Nahrung und Wasser reinigen;Purify Food and Drink
+1;Strahl der Übelkeit;Ray of Sickness
+1;Heiligtum;Sanctuary
+1;Sengendes Niederstrecken;Searing Smite
+1;Schild;Shield
+1;Schild des Glaubens;Shield of Faith
+1;Lautloses Trugbild;Silent Image
+1;Schlaf;Sleep
+1;Mit Tieren sprechen;Speak with Animals
+1;Fürchterlicher Lachanfall;Tasha's Hideous Laughter
+1;Schwebende Scheibe;Tenser's Floating Disk
+1;Donnerndes Niederstrecken;Thunderous Smite
+1;Donnerwoge;Thunderwave
+1;Unsichtbarer Diener;Unseen Servant
+1;Hexenpfeil;Witch Bolt
+1;Zorniges Niederstrecken;Wrathful Smite
+2;Säurepfeil;Acid Arrow
+2;Beistand;Aid
+2;Gestalt verändern;Alter Self
+2;Tierbote;Animal Messenger
+2;Arkanes Schloss;Arcane Lock
+2;Vorahnung;Augury
+2;Rindenhaut;Barkskin
+2;Tiersinn;Beast Sense
+2;Blindheit/Taubheit;Blindness/Deafness
+2;Verschwimmen;Blur
+2;Brandmarkendes Niederstrecken;Branding Smite
+2;Gefühle besänftigen;Calm Emotions
+2;Dolchwolke;Cloud of Daggers
+2;Dauerhafte Flamme;Continual Flame
+2;Pfeilspalier;Cordon of Arrows
+2;Krone des Wahnsinns;Crown of Madness
+2;Dunkelheit;Darkness
+2;Dunkelsicht;Darkvision
+2;Gedanken wahrnehmen;Detect Thoughts
+2;Attribut verbessern;Enhance Ability
+2;Vergrößern/Verkleinern;Enlarge/Reduce
+2;Fesseln;Enthrall
+2;Reittier finden;Find Steed
+2;Fallen finden;Find Traps
+2;Flammenklinge;Flame Blade
+2;Flammenkugel;Flaming Sphere
+2;Sanfte Ruhe;Gentle Repose
+2;Windstoß;Gust of Wind
+2;Metall erhitzen;Heat Metal
+2;Person festhalten;Hold Person
+2;Unsichtbarkeit;Invisibility
+2;Klopfen;Knock
+2;Schwache Genesung;Lesser Restoration
+2;Schweben;Levitate
+2;Tiere oder Pflanzen aufspüren;Locate Animals or Plants
+2;Gegenstand aufspüren;Locate Object
+2;Magischer Mund;Magic Mouth
+2;Magische Waffe;Magic Weapon
+2;Spiegelbilder;Mirror Image
+2;Nebelschritt;Misty Step
+2;Mondstrahl;Moonbeam
+2;Magische Aura des Arkanisten;Nystul's Magic Aura
+2;Spurloses Gehen;Pass without Trace
+2;Macht der Vorstellungskraft;Phantasmal Force
+2;Gebet der Heilung;Prayer of Healing
+2;Schutz vor Gift;Protection from Poison
+2;Schwächestrahl;Ray of Enfeeblement
+2;Seiltrick;Rope Trick
+2;Sengender Strahl;Scorching Ray
+2;Unsichtbares sehen;See Invisibility
+2;Zerbersten;Shatter
+2;Stille;Silence
+2;Spinnenklettern;Spider Climb
+2;Dornenwuchs;Spike Growth
+2;Waffe des Glaubens;Spiritual Weapon
+2;Einflüsterung;Suggestion
+2;Schützendes Band;Warding Bond
+2;Netz;Web
+2;Zone der Wahrheit;Zone of Truth
+3;Tote beleben;Animate Dead
+3;Aura der Gesundheit;Aura of Vitality
+3;Leuchtfeuer der Hoffnung;Beacon of Hope
+3;Fluch;Bestow Curse
+3;Blendendes Niederstrecken;Blinding Smite
+3;Flimmern;Blink
+3;Blitze herbeirufen;Call Lightning
+3;Hellsehen;Clairvoyance
+3;Tiere beschwören;Conjure Animals
+3;Schusshagel beschwören;Conjure Barrage
+3;Gegenzauber;Counterspell
+3;Nahrung und Wasser erschaffen;Create Food and Water
+3;Kreuzfahrermantel;Crusader's Mantle
+3;Tageslicht;Daylight
+3;Magie bannen;Dispel Magic
+3;Elementare Waffe;Elemental Weapon
+3;Furcht;Fear
+3;Totstellen;Feign Death
+3;Feuerball;Fireball
+3;Fliegen;Fly
+3;Gasförmige Gestalt;Gaseous Form
+3;Glyphe des Schutzes;Glyph of Warding
+3;Hast;Haste
+3;Hunger von Hadar;Hunger of Hadar
+3;Hypnotisches Muster;Hypnotic Pattern
+3;Winzige Hütte;Leomund's Tiny Hut
+3;Blitzpfeil;Lightning Arrow
+3;Blitz;Lightning Bolt
+3;Schutzkreis;Magic Circle
+3;Mächtiges Trugbild;Major Image
+3;Massen-Heilendes Wort;Mass Healing Word
+3;Mit Stein verschmelzen;Meld into Stone
+3;Unauffindbarkeit;Nondetection
+3;Geisterross;Phantom Steed
+3;Pflanzenwachstum;Plant Growth
+3;Schutz vor Energie;Protection from Energy
+3;Fluch brechen;Remove Curse
+3;Wiederbeleben;Revivify
+3;Verständigung;Sending
+3;Schneesturm;Sleet Storm
+3;Verlangsamen;Slow
+3;Mit Toten sprechen;Speak with Dead
+3;Mit Pflanzen sprechen;Speak with Plants
+3;Wächtergeister;Spirit Guardians
+3;Stinkende Wolke;Stinking Cloud
+3;Zungen;Tongues
+3;Vampirgriff;Vampiric Touch
+3;Wasser atmen;Water Breathing
+3;Auf Wasser gehen;Water Walk
+3;Windwall;Wind Wall
+4;Arkanes Auge;Arcane Eye
+4;Aura des Lebens;Aura of Life
+4;Aura der Reinheit;Aura of Purity
+4;Verbannung;Banishment
+4;Plage;Blight
+4;Zwang;Compulsion
+4;Verwirrung;Confusion
+4;Schwache Elementare beschwör.;Conjure Minor Elementals
+4;Wesen des Waldes beschwören;Conjure Woodland Beings
+4;Wasser kontrollieren;Control Water
+4;Todesschutz;Death Ward
+4;Dimensionstür;Dimension Door
+4;Weissagung;Divination
+4;Tier beherrschen;Dominate Beast
+4;Schwarze Tentakel;Evard's Black Tentacles
+4;Verarbeitung;Fabricate
+4;Feuerschild;Fire Shield
+4;Bewegungsfreiheit;Freedom of Movement
+4;Rieseninsekt;Giant Insect
+4;Schlingranke;Grasping Vine
+4;Mächtige Unsichtbarkeit;Greater Invisibility
+4;Hüter des Glaubens;Guardian of Faith
+4;Scheingelände;Hallucinatory Terrain
+4;Eissturm;Ice Storm
+4;Geheime Truhe;Leomund's Secret Chest
+4;Kreatur aufspüren;Locate Creature
+4;Treuer Hund;Mordenkainen's Faithful Hound
+4;Privates Heiligtum;Mordenkainen's Private Sanctum
+4;Unverwüstliche Sphäre;Otiluke's Resilient Sphere
+4;Tödliches Phantom;Phantasmal Killer
+4;Verwandlung;Polymorph
+4;Wankendmachendes Niederstrecken;Staggering Smite
+4;Stein formen;Stone Shape
+4;Steinhaut;Stoneskin
+4;Feuerwand;Wall of Fire
+5;Gegenstände beleben;Animate Objects
+5;Schutzhülle gegen Lebendes;Antilife Shell
+5;Erwecken;Awaken
+5;Verbannendes Niederstrecken;Banishing Smite
+5;Arkane Hand;Bigby's Hand
+5;Kreis der Macht;Circle of Power
+5;Todeswolke;Cloudkill
+5;Heiliges Gespräch;Commune
+5;Einswerden mit der Natur;Commune with Nature
+5;Kältekegel;Cone of Cold
+5;Elementar beschwören;Conjure Elemental
+5;Pfeilsalve beschwören;Conjure Volley
+5;Kontakt zu anderen Ebenen;Contact Other Plane
+5;Ansteckung;Contagion
+5;Erschaffung;Creation
+5;Zerstörerische Woge;Destructive Wave
+5;Gutes und Böses bannen;Dispel Evil and Good
+5;Person beherrschen;Dominate Person
+5;Traum;Dream
+5;Flammenschlag;Flame Strike
+5;Geas;Geas
+5;Vollständige Genesung;Greater Restoration
+5;Weihen;Hallow
+5;Monster festhalten;Hold Monster
+5;Insektenplage;Insect Plague
+5;Sagenkunde;Legend Lore
+5;Massen-Wunden heilen;Mass Cure Wounds
+5;Ablenkung;Mislead
+5;Erinnerung verändern;Modify Memory
+5;Wände passieren;Passwall
+5;Bindung der Ebenen;Planar Binding
+5;Tote erwecken;Raise Dead
+5;Telepathische Bindung;Rary's Telepathic Bond
+5;Wiedergeburt;Reincarnate
+5;Ausspähung;Scrying
+5;Äußerlichkeiten;Seeming
+5;Schneller Köcher;Swift Quiver
+5;Telekinese;Telekinesis
+5;Kreis der Teleportation;Teleportation Circle
+5;Hölzerner Weg;Tree Stride
+5;Energiewand;Wall of Force
+5;Steinwand;Wall of Stone
+6;Arkanes Tor;Arcane Gate
+6;Klingenbarriere;Blade Barrier
+6;Kettenblitz;Chain Lightning
+6;Todeskreis;Circle of Death
+6;Feenwesen beschwören;Conjure Fey
+6;Notfall;Contingency
+6;Untote erschaffen;Create Undead
+6;Auflösung;Disintegrate
+6;Sofortige Beschwörung;Drawmij's Instant Summons
+6;Böser Blick;Eyebite
+6;Weg finden;Find the Path
+6;Fleisch zu Stein;Flesh to Stone
+6;Zutritt verwehren;Forbiddance
+6;Kugel der Unverwundbarkeit;Globe of Invulnerability
+6;Wächter und Hüter;Guards and Wards
+6;Leid;Harm
+6;Heilung;Heal
+6;Heldenmahl;Heroes' Feast
+6;Magisches Gefäß;Magic Jar
+6;Massen-Einflüsterung;Mass Suggestion
+6;Erde bewegen;Move Earth
+6;Frostsphäre;Otiluke's Freezing Sphere
+6;Unwiderstehlicher Tanz;Otto's Irresistible Dance
+6;Verbündeter aus den Ebenen;Planar Ally
+6;Vorbestimmtes Trugbild;Programmed Illusion
+6;Sonnenstrahl;Sunbeam
+6;Pflanzentor;Transport via Plants
+6;Wahrer Blick;True Seeing
+6;Eiswand;Wall of Ice
+6;Dornenwand;Wall of Thorns
+6;Windwandeln;Wind Walk
+6;Rückruf;Word of Recall
+7;Celestisches Wesen beschwören;Conjure Celestial
+7;Spätzündender Feuerball;Delayed Blast Fireball
+7;Göttliches Wort;Divine Word
+7;Ätherische Gestalten;Etherealness
+7;Finger des Todes;Finger of Death
+7;Feuersturm;Fire Storm
+7;Energiekäfig;Forcecage
+7;Arkane Spiegelung;Mirage Arcane
+7;Herrliches Herrenhaus;Mordenkainen's Magnificent Mansion
+7;Arkanes Schwert;Mordenkainen's Sword
+7;Ebenenwechsel;Plane Shift
+7;Regenbogenspiel;Prismatic Spray
+7;Trugbild projizieren;Project Image
+7;Regeneration;Regenerate
+7;Auferstehung;Resurrection
+7;Schwerkraft umkehren;Reverse Gravity
+7;Verbergen;Sequester
+7;Simulakrum;Simulacrum
+7;Symbol;Symbol
+7;Teleportieren;Teleport
+8;Tierform;Animal Shapes
+8;Antimagisches Feld;Antimagic Field
+8;Antipathie/Sympathie;Antipathy/Sympathy
+8;Klon;Clone
+8;Wetterkontrolle;Control Weather
+8;Halbebene;Demiplane
+8;Monster beherrschen;Dominate Monster
+8;Erdbeben;Earthquake
+8;Schwachsinn;Feeblemind
+8;Redegewandtheit;Glibness
+8;Heilige Aura;Holy Aura
+8;Flammende Wolke;Incendiary Cloud
+8;Irrgarten;Maze
+8;Gedankenleere;Mind Blank
+8;Wort der Macht: Betäubung;Power Word Stun
+8;Sonnenfeuer;Sunburst
+8;Telepathie;Telepathy
+8;Tsunami;Tsunami
+9;Astrale Projektion;Astral Projection
+9;Voraussicht;Foresight
+9;Tor;Gate
+9;Einkerkerung;Imprisonment
+9;Massen-Heilung;Mass Heal
+9;Meteoritenschwarm;Meteor Swarm
+9;Wort der Macht: Heilung;Power Word Heal
+9;Wort der Macht: Tod;Power Word Kill
+9;Regenbogenwand;Prismatic Wall
+9;Gestaltwandel;Shapechange
+9;Sturm der Vergeltung;Storm of Vengeance
+9;Zeitstopp;Time Stop
+9;Wahre Verwandlung;True Polymorph
+9;Wahre Auferstehung;True Resurrection
+9;Unheimliches Schicksal;Weird
+9;Wunsch;Wish
