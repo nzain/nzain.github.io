@@ -6,6 +6,8 @@
     openCsv: "CSV öffnen…",
     addSpell: "Zauber anlegen…",
     exportCsv: "CSV exportieren…",
+    exportCsvUnsaved:
+      "Änderungen sind nur im Browser gespeichert — bitte CSV exportieren.",
     overview: "Übersicht…",
     overviewTitle: "Zauberübersicht",
     overviewClose: "Schließen",

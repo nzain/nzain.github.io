@@ -13,6 +13,7 @@
   var contextMenuIndex = null;
   var scrollRestoreIndex = null;
   var sortMode = "name";
+  var hasUnsavedChanges = false;
   var levelFilter;
   var classFilter;
 
@@ -210,6 +211,25 @@
     var hasSpells = spells.length > 0;
     els.btnExport.disabled = !hasSpells;
     els.btnOverview.disabled = !hasSpells;
+    updateUnsavedChangesUi();
+  }
+
+  function setUnsavedChanges(value) {
+    hasUnsavedChanges = !!value;
+    updateUnsavedChangesUi();
+  }
+
+  function updateUnsavedChangesUi() {
+    if (!els.btnExport) {
+      return;
+    }
+    var show = hasUnsavedChanges && !els.btnExport.disabled;
+    els.btnExport.classList.toggle("has-unsaved-changes", show);
+    if (show) {
+      els.btnExport.title = SCG_I18N.t("exportCsvUnsaved");
+    } else {
+      els.btnExport.removeAttribute("title");
+    }
   }
 
   function updatePrintButton(stats) {
@@ -261,6 +281,7 @@
     render();
     updateSpellDependentButtons();
     persistSpells();
+    setUnsavedChanges(false);
   }
 
   function openOverview() {
@@ -335,6 +356,7 @@
         updateClassFilterVisibility();
         render();
         persistSpells();
+        setUnsavedChanges(true);
       },
       onCancel: function () {
         requestAnimationFrame(function () {
@@ -377,6 +399,7 @@
         updateSpellDependentButtons();
         render();
         persistSpells();
+        setUnsavedChanges(true);
       },
       onCancel: function () {
         spells.splice(newIdx, 1);
@@ -485,6 +508,7 @@
     a.download = out.filename;
     a.click();
     URL.revokeObjectURL(url);
+    setUnsavedChanges(false);
     setStatus(SCG_I18N.t("exported", { file: out.filename }));
   }
 

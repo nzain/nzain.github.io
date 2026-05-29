@@ -132,6 +132,17 @@ body {
   cursor: not-allowed;
 }
 
+.toolbar button.has-unsaved-changes:not(:disabled) {
+  border-color: #c45c26;
+  background: #fff4e6;
+  box-shadow: inset 0 0 0 1px #e8a04c;
+  font-weight: 600;
+}
+
+.toolbar button.has-unsaved-changes:not(:disabled):hover {
+  background: #ffe8cc;
+}
+
 .toolbar-row--primary {
   flex-wrap: nowrap;
 }
