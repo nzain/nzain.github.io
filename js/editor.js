@@ -131,6 +131,10 @@
     }
     var draft = getDraftSpell();
     els.previewMount.innerHTML = "";
+    var englishName = SCG_Render.buildCardEnglishName(draft);
+    if (englishName) {
+      els.previewMount.appendChild(englishName);
+    }
     var card = SCG_Render.buildCard(draft, openIndex);
     els.previewMount.appendChild(card);
     SCG_Render.checkOverflow(card);
@@ -440,6 +444,12 @@
     open: open,
     close: close,
     isOpen: isOpen,
+    getOpenIndex: function () {
+      return openIndex;
+    },
+    setOpenIndex: function (idx) {
+      openIndex = idx;
+    },
     refreshPreview: updatePreview,
   };
 })(typeof window !== "undefined" ? window : this);

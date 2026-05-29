@@ -205,6 +205,17 @@
     return article;
   }
 
+  function buildCardEnglishName(spell) {
+    var nameEn = spell && spell.nameEn ? String(spell.nameEn).trim() : "";
+    if (!nameEn) {
+      return null;
+    }
+    var el = document.createElement("p");
+    el.className = "card-english-name";
+    el.textContent = nameEn;
+    return el;
+  }
+
   function buildCard(spell, index) {
     var article = document.createElement("article");
     article.className = "spell-card";
@@ -482,6 +493,10 @@
           pair.classList.add("card-pair--dimmed");
         }
       }
+      var englishName = buildCardEnglishName(spell);
+      if (englishName) {
+        pair.appendChild(englishName);
+      }
       pair.appendChild(buildCard(spell, idx));
       pair.appendChild(buildCardBack(spell));
       preview.appendChild(pair);
@@ -521,6 +536,7 @@
 
   global.SCG_Render = {
     buildCard: buildCard,
+    buildCardEnglishName: buildCardEnglishName,
     buildCardBack: buildCardBack,
     renderGrid: renderGrid,
     checkOverflow: checkOverflow,

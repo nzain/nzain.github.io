@@ -10,7 +10,7 @@
 <body>
   <header class="toolbar" id="toolbar">
     <h1 class="app-title" data-i18n="appTitle">Zauberkarten-Generator</h1>
-    <div class="toolbar-row">
+    <div class="toolbar-row toolbar-row--primary">
       <div class="file-actions">
         <button type="button" id="btn-open" data-i18n="openCsv">Open CSV…</button>
         <button type="button" id="btn-add-spell" data-i18n="addSpell">Add spell…</button>
@@ -25,6 +25,16 @@
       <label class="toolbar-field">
         <span data-i18n="cardHeight">Card height (mm)</span>
         <input type="number" id="card-height" min="50" max="150">
+      </label>
+      <label class="toolbar-field toolbar-sort">
+        <svg class="toolbar-sort-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M3 4.25L6 1.25 9 4.25H3z"/>
+          <path fill="currentColor" d="M3 7.75L6 10.75 9 7.75H3z"/>
+        </svg>
+        <select id="sort-mode" data-i18n-aria="sortBy">
+          <option value="name">de</option>
+          <option value="nameEn">en</option>
+        </select>
       </label>
     </div>
     <div class="toolbar-row filter-row" id="level-filter-row">

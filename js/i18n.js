@@ -11,6 +11,7 @@
     filterNone: "Keine",
     cardWidth: "Kartenbreite (mm)",
     cardHeight: "Kartenhöhe (mm)",
+    sortBy: "Sortierung",
     print: "Drucken",
     printCards: "Drucke {printed}/{total} Karten",
     cantrip: "Zaubertrick",

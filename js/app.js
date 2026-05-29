@@ -3,6 +3,7 @@
 
   var STORAGE_KEY_SPELLS = "scg-spells-v1";
   var STORAGE_KEY_FILENAME = "scg-spells-filename-v1";
+  var STORAGE_KEY_SORT_MODE = "scg-sort-mode";
 
   var spells = [];
   var activeFilename = "";
@@ -11,6 +12,7 @@
   var selectedIndices = {};
   var contextMenuIndex = null;
   var scrollRestoreIndex = null;
+  var sortMode = "name";
   var levelFilter;
   var classFilter;
 
@@ -57,8 +59,31 @@
       var h = localStorage.getItem("scg-card-height");
       els.cardWidth.value = w || String(SCG_Config.DEFAULT_CARD_WIDTH_MM);
       els.cardHeight.value = h || String(SCG_Config.DEFAULT_CARD_HEIGHT_MM);
+      sortMode = localStorage.getItem(STORAGE_KEY_SORT_MODE) || "name";
+      if (sortMode !== "name" && sortMode !== "nameEn") {
+        sortMode = "name";
+      }
+      if (els.sortMode) {
+        els.sortMode.value = sortMode;
+      }
     } catch (e) { /* ignore */ }
     applyDimensions();
+  }
+
+  function saveSortMode() {
+    sortMode = els.sortMode.value === "nameEn" ? "nameEn" : "name";
+    try {
+      localStorage.setItem(STORAGE_KEY_SORT_MODE, sortMode);
+    } catch (e) { /* ignore */ }
+  }
+
+  function applySort() {
+    var editIdx = SCG_Editor.isOpen() ? SCG_Editor.getOpenIndex() : null;
+    var editSpell = editIdx != null ? spells[editIdx] : null;
+    SCG_Util.sortSpells(spells, sortMode);
+    if (editSpell != null) {
+      SCG_Editor.setOpenIndex(spells.indexOf(editSpell));
+    }
   }
 
   function saveSettings() {
@@ -206,7 +231,7 @@
 
   function setSpells(newSpells, errors, filename) {
     spells = newSpells;
-    SCG_Util.sortSpells(spells);
+    applySort();
     parseErrors = errors || [];
     hasClassTags = spellsHaveClassTags(spells);
     selectedIndices = {};
@@ -274,7 +299,7 @@
       schoolOptions: collectSchoolOptions(),
       onSave: function (index, updatedSpell) {
         spells[index] = updatedSpell;
-        SCG_Util.sortSpells(spells);
+        applySort();
         scrollRestoreIndex = spells.indexOf(updatedSpell);
         hasClassTags = spellsHaveClassTags(spells);
         updateClassFilterVisibility();
@@ -315,7 +340,7 @@
       schoolOptions: collectSchoolOptions(),
       onSave: function (index, updatedSpell) {
         spells[index] = updatedSpell;
-        SCG_Util.sortSpells(spells);
+        applySort();
         scrollRestoreIndex = spells.indexOf(updatedSpell);
         hasClassTags = spellsHaveClassTags(spells);
         updateClassFilterVisibility();
@@ -458,6 +483,14 @@
     });
   }
 
+  function onSortModeChange() {
+    saveSortMode();
+    selectedIndices = {};
+    applySort();
+    showDefaultStatus();
+    render();
+  }
+
   function bindEvents() {
     els.btnOpen.addEventListener("click", onOpenClick);
     els.btnAddSpell.addEventListener("click", startAddSpell);
@@ -480,6 +513,7 @@
     });
     els.cardWidth.addEventListener("change", saveSettings);
     els.cardHeight.addEventListener("change", saveSettings);
+    els.sortMode.addEventListener("change", onSortModeChange);
 
     els.grid.addEventListener("click", onGridClick);
     els.grid.addEventListener("contextmenu", onGridContextMenu);
@@ -504,6 +538,7 @@
       fileInput: $("file-input"),
       cardWidth: $("card-width"),
       cardHeight: $("card-height"),
+      sortMode: $("sort-mode"),
       btnPrint: $("btn-print"),
       btnClearSelection: $("btn-clear-selection"),
       levelFilterChips: $("level-filter-chips"),
