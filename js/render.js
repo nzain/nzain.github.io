@@ -346,6 +346,19 @@
     });
   }
 
+  function hasVisiblePreviewOverflow(container) {
+    if (!container) {
+      return false;
+    }
+    var preview = container.querySelector(".cards-preview");
+    if (!preview) {
+      return false;
+    }
+    return (
+      preview.querySelector(".spell-card:not(.spell-card--back).overflow-warning") != null
+    );
+  }
+
   function buildClassIconRow(spell) {
     var tokens = parseSpellClasses(spell);
     var active = {};
@@ -613,6 +626,7 @@
     renderGrid: renderGrid,
     checkOverflow: checkOverflow,
     checkAllOverflow: checkAllOverflow,
+    hasVisiblePreviewOverflow: hasVisiblePreviewOverflow,
     applyCardDimensions: applyCardDimensions,
     schoolToIconSlug: schoolToIconSlug,
   };

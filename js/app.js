@@ -151,7 +151,7 @@
     SCG_Render.applyCardDimensions(w, h);
     if (els.grid) {
       requestAnimationFrame(function () {
-        SCG_Render.checkAllOverflow(els.grid);
+        refreshOverflowState();
         if (SCG_Editor.isOpen()) {
           SCG_Editor.refreshPreview();
         }
@@ -240,6 +240,20 @@
     els.btnPrint.disabled = stats.printed === 0;
   }
 
+  function updateToolbarOverflowBadge() {
+    if (!els.toolbarOverflowBadge) {
+      return;
+    }
+    var hasOverflow = SCG_Render.hasVisiblePreviewOverflow(els.grid);
+    els.toolbarOverflowBadge.hidden = !hasOverflow;
+    els.toolbarOverflowBadge.textContent = hasOverflow ? SCG_I18N.t("overflow") : "";
+  }
+
+  function refreshOverflowState() {
+    SCG_Render.checkAllOverflow(els.grid);
+    updateToolbarOverflowBadge();
+  }
+
   function scrollSpellIntoView(idx) {
     if (idx == null || !els.grid) {
       return;
@@ -255,7 +269,7 @@
     updatePrintButton(stats);
     updateSelectionUi();
     requestAnimationFrame(function () {
-      SCG_Render.checkAllOverflow(els.grid);
+      refreshOverflowState();
       if (scrollRestoreIndex != null) {
         var restoreIdx = scrollRestoreIndex;
         scrollRestoreIndex = null;
@@ -516,7 +530,7 @@
     if (els.btnPrint.disabled) {
       return;
     }
-    SCG_Render.checkAllOverflow(els.grid);
+    refreshOverflowState();
     window.print();
   }
 
@@ -581,7 +595,7 @@
     }
 
     window.addEventListener("resize", function () {
-      SCG_Render.checkAllOverflow(els.grid);
+      refreshOverflowState();
     });
   }
 
@@ -612,6 +626,7 @@
       overviewDialog: $("spell-overview"),
       overviewBody: $("spell-overview-body"),
       overviewClose: $("spell-overview-close"),
+      toolbarOverflowBadge: $("toolbar-overflow-badge"),
     };
   }
 

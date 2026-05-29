@@ -47,10 +47,29 @@ body {
   padding: 0.75rem 1rem;
 }
 
+.toolbar-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .app-title {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
+}
+
+.toolbar-overflow-badge {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  background: var(--warn);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 2px;
+  white-space: nowrap;
 }
 
 .toolbar-row {
