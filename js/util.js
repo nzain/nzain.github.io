@@ -49,6 +49,27 @@
     });
   }
 
+  function compareSpells(a, b) {
+    var la = a && a.level != null ? a.level : 0;
+    var lb = b && b.level != null ? b.level : 0;
+    if (la !== lb) {
+      return la - lb;
+    }
+    return String(a && a.name != null ? a.name : "").localeCompare(
+      String(b && b.name != null ? b.name : ""),
+      undefined,
+      { sensitivity: "base" }
+    );
+  }
+
+  function sortSpells(list) {
+    if (!list || !list.length) {
+      return list;
+    }
+    list.sort(compareSpells);
+    return list;
+  }
+
   global.SCG_Util = {
     escapeHtml: escapeHtml,
     mapHasTruthy: mapHasTruthy,
@@ -56,5 +77,7 @@
     writeJson: writeJson,
     stripDescriptionLineBreaks: stripDescriptionLineBreaks,
     highlightDescriptionHtml: highlightDescriptionHtml,
+    compareSpells: compareSpells,
+    sortSpells: sortSpells,
   };
 })(typeof window !== "undefined" ? window : this);

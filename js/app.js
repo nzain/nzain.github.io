@@ -55,12 +55,8 @@
     try {
       var w = localStorage.getItem("scg-card-width");
       var h = localStorage.getItem("scg-card-height");
-      var lang = localStorage.getItem("scg-ui-lang");
       els.cardWidth.value = w || String(SCG_Config.DEFAULT_CARD_WIDTH_MM);
       els.cardHeight.value = h || String(SCG_Config.DEFAULT_CARD_HEIGHT_MM);
-      if (lang) {
-        els.uiLang.value = lang;
-      }
     } catch (e) { /* ignore */ }
     applyDimensions();
   }
@@ -210,6 +206,7 @@
 
   function setSpells(newSpells, errors, filename) {
     spells = newSpells;
+    SCG_Util.sortSpells(spells);
     parseErrors = errors || [];
     hasClassTags = spellsHaveClassTags(spells);
     selectedIndices = {};
@@ -277,7 +274,8 @@
       schoolOptions: collectSchoolOptions(),
       onSave: function (index, updatedSpell) {
         spells[index] = updatedSpell;
-        scrollRestoreIndex = index;
+        SCG_Util.sortSpells(spells);
+        scrollRestoreIndex = spells.indexOf(updatedSpell);
         hasClassTags = spellsHaveClassTags(spells);
         updateClassFilterVisibility();
         render();
@@ -316,7 +314,8 @@
       schoolOptions: collectSchoolOptions(),
       onSave: function (index, updatedSpell) {
         spells[index] = updatedSpell;
-        scrollRestoreIndex = index;
+        SCG_Util.sortSpells(spells);
+        scrollRestoreIndex = spells.indexOf(updatedSpell);
         hasClassTags = spellsHaveClassTags(spells);
         updateClassFilterVisibility();
         els.btnExport.disabled = !spells.length;
@@ -466,19 +465,6 @@
     els.btnExport.addEventListener("click", onExport);
     els.btnClearSelection.addEventListener("click", clearSelection);
 
-    els.uiLang.addEventListener("change", function () {
-      SCG_I18N.setLang(els.uiLang.value);
-      levelFilter.buildChips(els.levelFilterChips);
-      classFilter.buildChips(els.classFilterChips);
-      render();
-      if (!els.status.classList.contains("error")) {
-        showDefaultStatus();
-      }
-      if (SCG_Editor.isOpen()) {
-        SCG_I18N.applyToDocument();
-      }
-    });
-
     els.levelAll.addEventListener("click", function () {
       levelFilter.setAll(true);
     });
@@ -515,7 +501,6 @@
       btnAddSpell: $("btn-add-spell"),
       btnExport: $("btn-export"),
       fileInput: $("file-input"),
-      uiLang: $("ui-lang"),
       cardWidth: $("card-width"),
       cardHeight: $("card-height"),
       btnPrint: $("btn-print"),
@@ -535,7 +520,6 @@
     initEls();
     initFilters();
     SCG_I18N.init();
-    els.uiLang.value = SCG_I18N.getLang();
     loadSettings();
     levelFilter.load();
     classFilter.load();
