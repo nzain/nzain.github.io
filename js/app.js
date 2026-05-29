@@ -301,6 +301,7 @@
       description: "",
       classes: "",
       ritual: false,
+      nameEn: "",
     };
   }
 

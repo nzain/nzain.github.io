@@ -57,6 +57,8 @@
       ),
       classes: getClassesFromChips(),
       ritual: !!(els.ritual && els.ritual.checked),
+      nameEn:
+        spellRef && spellRef.nameEn != null ? String(spellRef.nameEn) : "",
     };
   }
 

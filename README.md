@@ -8,10 +8,12 @@ You can run this locally without any extra installs, just double click the index
 Semicolon-delimited (`;`), hardcodex-compatible column order:
 
 ```text
-Level; Name; Type; Cast Time; Range; Components; Duration; Description; [Classes]; [Ritual]
+Level; Name; Type; Cast Time; Range; Components; Duration; Description; [Classes]; [Ritual]; [Name (EN)]
 ```
 
 The optional `Ritual` column holds `R` for spells that may be cast as a ritual, otherwise empty. Missing values are treated as non-ritual. Ritual spells are tagged with a small `(Ritual)` next to the school in the card footer.
+
+The optional `Name (EN)` column holds the English PHB spell name for manual cross-checks against German names. It is not shown on cards and is not editable in the UI; export always includes the column (empty when unset).
 
 Descriptions may include limited HTML (`<br>`, `<strong>`, `<b>`, `<span class=nameref>`, `<a href=123>`, tables). Content is sanitized before display.
 

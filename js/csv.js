@@ -47,6 +47,7 @@
       description: row[7] != null ? String(row[7]) : "",
       classes: (row[8] || "").trim(),
       ritual: /^(r|1|x|y|true|ritual)$/i.test(String(row[9] || "").trim()),
+      nameEn: (row[10] || "").trim(),
     };
   }
 
@@ -101,6 +102,7 @@
       SCG_Util.stripDescriptionLineBreaks(spell.description),
       spell.classes || "",
       spell.ritual ? "R" : "",
+      spell.nameEn || "",
     ];
   }
 
