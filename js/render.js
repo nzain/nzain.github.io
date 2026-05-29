@@ -346,17 +346,21 @@
     });
   }
 
-  function hasVisiblePreviewOverflow(container) {
+  function countVisiblePreviewOverflow(container) {
     if (!container) {
-      return false;
+      return 0;
     }
     var preview = container.querySelector(".cards-preview");
     if (!preview) {
-      return false;
+      return 0;
     }
-    return (
-      preview.querySelector(".spell-card:not(.spell-card--back).overflow-warning") != null
-    );
+    return preview.querySelectorAll(
+      ".spell-card:not(.spell-card--back).overflow-warning"
+    ).length;
+  }
+
+  function hasVisiblePreviewOverflow(container) {
+    return countVisiblePreviewOverflow(container) > 0;
   }
 
   function buildClassIconRow(spell) {
@@ -626,6 +630,7 @@
     renderGrid: renderGrid,
     checkOverflow: checkOverflow,
     checkAllOverflow: checkAllOverflow,
+    countVisiblePreviewOverflow: countVisiblePreviewOverflow,
     hasVisiblePreviewOverflow: hasVisiblePreviewOverflow,
     applyCardDimensions: applyCardDimensions,
     schoolToIconSlug: schoolToIconSlug,

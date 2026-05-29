@@ -244,9 +244,10 @@
     if (!els.toolbarOverflowBadge) {
       return;
     }
-    var hasOverflow = SCG_Render.hasVisiblePreviewOverflow(els.grid);
-    els.toolbarOverflowBadge.hidden = !hasOverflow;
-    els.toolbarOverflowBadge.textContent = hasOverflow ? SCG_I18N.t("overflow") : "";
+    var overflowCount = SCG_Render.countVisiblePreviewOverflow(els.grid);
+    els.toolbarOverflowBadge.hidden = overflowCount === 0;
+    els.toolbarOverflowBadge.textContent =
+      overflowCount > 0 ? SCG_I18N.t("overflowBadge", { n: overflowCount }) : "";
   }
 
   function refreshOverflowState() {

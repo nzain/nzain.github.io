@@ -29,6 +29,7 @@
     classes: "Klassen",
     ritual: "Ritual",
     overflow: "Überlauf",
+    overflowBadge: "{n} Überlauf",
     noSpells: "Öffne eine CSV-Datei, um Zauber zu laden.",
     openHint: "Klicke auf „CSV öffnen“, um eine Zauberliste zu laden.",
     loaded: "{n} Zauber aus {file} geladen",
